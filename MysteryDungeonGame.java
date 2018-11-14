@@ -31,6 +31,7 @@ public class MysteryDungeonGame extends JKGame {
     private MysteryDungeon dungeon;
 
     Player player;
+    private static final int NUM_ALLIES = 3;
 
     public MysteryDungeonGame(){
         this.setBackground(Color.BLACK);
@@ -41,7 +42,9 @@ public class MysteryDungeonGame extends JKGame {
         timer.start();
 
         player = new Player(0,0);
-        new Ally(0, 0, player);
+        for(int i = 0; i < NUM_ALLIES; i++){
+            new Ally(0, 0, player);
+        }
         dungeon = new MysteryDungeon(341634642L, this, player);
 
     }
@@ -226,7 +229,6 @@ public class MysteryDungeonGame extends JKGame {
     private void toNextFloor(){
         timer.stop();
         betweenFloors = false;
-        player.curBelly = player.maxBelly;
         if(critical){
             criticalTimer.start();
         }

@@ -47,7 +47,7 @@ public class Player extends PartyMember{
     }
 
     void putInBag(Item i, MysteryDungeon dungeon){
-        if(bag.size() <= bagLimit){
+        if(bag.size() < bagLimit){
             bag.add(i);
             dungeon.removeFlat(i);
         }
