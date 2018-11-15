@@ -36,13 +36,14 @@ public class MysteryDungeonGame extends JKGame {
     private static final int NUM_ALLIES = 3;
 
     private Queue<String> messages;
+    int statsWidth;
 
     public MysteryDungeonGame(){
         this.setBackground(Color.BLACK);
         messages = new LinkedList<>();
 
         bindKeyStrokeTo("enter.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), startGameAc());
-        criticalTimer = new Timer(500, (ae) -> repaintHUD());
+        criticalTimer = new Timer(500, (ae) -> repaintStats());
         timer = new Timer(750, (ae) -> repaint());
         timer.start();
 
@@ -121,8 +122,9 @@ public class MysteryDungeonGame extends JKGame {
 
     void repaintGame(){
         repaintDungeon();
+        repaintHUD();
         if(!critical){
-            repaintHUD();
+            repaintStats();
         }
     }
 
@@ -359,6 +361,7 @@ public class MysteryDungeonGame extends JKGame {
         String hp = String.format("HP: %3d/%-3d", (int) Math.ceil(player.curHP), player.maxHP);
         String belly = String.format("BELLY: %3d/%-3d", (int) Math.ceil(player.curBelly), player.maxBelly);
         String hud = hp + "     " + belly;
+        statsWidth = fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     ");
         g2d.drawString(hud, TILE_SIZE, HUD_HEIGHT - fm.getHeight() + fm.getAscent());
     }
 
@@ -373,9 +376,14 @@ public class MysteryDungeonGame extends JKGame {
         messages.add(msg);
     }
 
-    /** Helper function to repaint only the HUD */
+    /** Helper function to repaint only the info portion of the HUD */
     private void repaintHUD(){
-        repaint(0, 0, GAME_WIDTH, HUD_HEIGHT);
+        repaint(statsWidth, 0, GAME_WIDTH - statsWidth, HUD_HEIGHT);
+    }
+
+    /** Helper function to repaint only the stats portion of the HUD */
+    private void repaintStats(){
+        repaint(0, 0, statsWidth, HUD_HEIGHT);
     }
 
     /** Helper function to repaint only the dungeon */
