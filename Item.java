@@ -1,6 +1,5 @@
 public abstract class Item extends Holdable{
 
-    String name;
     String description;
 
     Item(int i, int j){

@@ -1,5 +1,7 @@
 public abstract class Holdable extends FlatOccupant{
 
+    String name;
+
     Holdable(int i, int j){
         super(i, j);
     }

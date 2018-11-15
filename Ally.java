@@ -1,7 +1,6 @@
 import java.awt.Color;
 
 public class Ally extends PartyMember{
-    //     Player player;
     static Color darkGreen = new Color(0,127,0);
     int allyNumber;
     static int allyTotal = 1;
@@ -15,6 +14,23 @@ public class Ally extends PartyMember{
         player.allies.add(this);
         allyNumber = allyTotal;
         allyTotal++;
+        name = "Ally " + allyNumber;
+    }
+
+    void checkHealth(MysteryDungeonGame game){
+        super.checkHealth(game);
+        if(curHP == 0){
+            player.allies.remove(this);
+        }
+    }
+
+    void checkCritical(MysteryDungeonGame game){
+        if(curHP <= maxHP * 0.2 && !critical){
+            critical = true;
+            game.addMessage(String.format("%s is low on health", name));
+        } else if (curHP > maxHP * 0.2 && critical) {
+            critical = false;
+        }
     }
 
     void take(Coin c, MysteryDungeon dungeon){
@@ -23,10 +39,6 @@ public class Ally extends PartyMember{
 
     void take(Item i, MysteryDungeon dungeon){
         player.putInBag(i, dungeon);
-    }
-
-    public String toString(){
-        return String.format("Ally %d (HP: %d/%d, Belly: %d/%d)", allyNumber, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly);
     }
 
 }

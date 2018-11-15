@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Player extends PartyMember{
     int money = 0;
-    boolean critical = false;
     static Color pink = new Color(255,65,140);
     Set<Item> bag;
     Set<PartyMember> party;
@@ -18,19 +17,17 @@ public class Player extends PartyMember{
         bag = new LinkedHashSet<>();
         party = new LinkedHashSet<>();
         allies = new LinkedHashSet<>();
+        name = "Player";
         player = this;
         party.add(this);
-    }
-
-    void move(int dx, int dy, MysteryDungeonGame game){
-        super.move(dx, dy, game);
-        checkCritical(game);
     }
 
     void checkCritical(MysteryDungeonGame game){
         if(curHP <= maxHP * 0.2 && !critical){
             critical = true;
             game.setCritical(true);
+            game.addMessage(String.format("%s is low on health", name));
+//             game.addMessage(String.format("<html><font color=\"red\">%s is low on health</font></html>"), name);
         } else if (curHP > maxHP * 0.2 && critical) {
             game.setCritical(false);
             critical = false;
@@ -40,6 +37,7 @@ public class Player extends PartyMember{
     void take(Coin c, MysteryDungeon dungeon){
         money += c.value;
         dungeon.removeFlat(c);
+        dungeon.game.addMessage(String.format("%s picked up %s", name, c.name));
     }
 
     void take(Item i, MysteryDungeon dungeon){
@@ -51,20 +49,17 @@ public class Player extends PartyMember{
             bag.add(i);
             dungeon.removeFlat(i);
         }
+        dungeon.game.addMessage(String.format("%s picked up %s", name, i.name));
     }
 
     void use(Item i, MysteryDungeon dungeon){
         i.used(this);
         dungeon.removeFlat(i);
+        dungeon.game.addMessage(String.format("%s found and used %s", name, i.name));
     }
 
     Object[] getBag(){
         return bag.toArray();
-    }
-
-
-    public String toString(){
-        return String.format("Player (HP: %d/%d, Belly: %d/%d)", (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly);
     }
 
     Object[] getParty(){

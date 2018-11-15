@@ -9,6 +9,7 @@ public class Coin extends Holdable{
         value = v;
         symbol = "⍟";
         textColor = gold;
+        name = "Coin";
     }
 
     void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){
@@ -18,4 +19,6 @@ public class Coin extends Holdable{
     void walkedOn(Player p, MysteryDungeonGame game, MysteryDungeon dungeon){
         p.take(this, dungeon);
     }
+
+
 }

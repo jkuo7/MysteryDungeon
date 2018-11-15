@@ -3,6 +3,7 @@ public abstract class Creature extends Occupant{
     boolean isPlayer = false;
     int maxHP = 100;
     double curHP = maxHP;
+    String name;
 
     Creature(int i, int j){
         super(i, j);

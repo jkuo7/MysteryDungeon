@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class MysteryDungeonGame extends JKGame {
     private static final int TILE_SIZE = 16; //20
@@ -33,8 +35,11 @@ public class MysteryDungeonGame extends JKGame {
     Player player;
     private static final int NUM_ALLIES = 3;
 
+    private Queue<String> messages;
+
     public MysteryDungeonGame(){
         this.setBackground(Color.BLACK);
+        messages = new LinkedList<>();
 
         bindKeyStrokeTo("enter.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), startGameAc());
         criticalTimer = new Timer(500, (ae) -> repaintHUD());
@@ -181,7 +186,7 @@ public class MysteryDungeonGame extends JKGame {
                     JOptionPane.PLAIN_MESSAGE,
                     null, party, party[0]);
             if(pm != null){
-                pm.useFromBag(i);
+                pm.useFromBag(i, this);
                 repaintHUD();
             }
         }
@@ -214,7 +219,6 @@ public class MysteryDungeonGame extends JKGame {
         if(critical){
             criticalTimer.stop();
         }
-
         timer = new Timer(500, (ae) ->{
             repaint();
             countdown--;
@@ -229,6 +233,7 @@ public class MysteryDungeonGame extends JKGame {
     private void toNextFloor(){
         timer.stop();
         betweenFloors = false;
+        addMessage(String.format("Reached floor %d!", curFloor));
         if(critical){
             criticalTimer.start();
         }
@@ -346,7 +351,7 @@ public class MysteryDungeonGame extends JKGame {
         String info = floor + "     " + money + "     " + items;
 
         g2d.drawString(info, TILE_SIZE + fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     "), HUD_HEIGHT - fm.getHeight() + fm.getAscent());
-
+        paintMsg(g2d, fm);
     }
 
     private void paintHUDStats(Graphics2D g2d, FontMetrics fm, Color color){
@@ -355,6 +360,17 @@ public class MysteryDungeonGame extends JKGame {
         String belly = String.format("BELLY: %3d/%-3d", (int) Math.ceil(player.curBelly), player.maxBelly);
         String hud = hp + "     " + belly;
         g2d.drawString(hud, TILE_SIZE, HUD_HEIGHT - fm.getHeight() + fm.getAscent());
+    }
+
+    private void paintMsg(Graphics2D g2d, FontMetrics fm){
+        if(!messages.isEmpty()){
+            String msg = messages.remove();
+            g2d.drawString(msg, GAME_WIDTH - TILE_SIZE - fm.stringWidth(msg), HUD_HEIGHT - fm.getHeight() + fm.getAscent());
+        }
+    }
+
+    void addMessage(String msg){
+        messages.add(msg);
     }
 
     /** Helper function to repaint only the HUD */
