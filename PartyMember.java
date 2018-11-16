@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public abstract class PartyMember extends Creature{
     double hPRegen = 0.005;
     int maxBelly = 100;
@@ -27,18 +29,26 @@ public abstract class PartyMember extends Creature{
         if(curHP == 0){
             game.outOfHP(this);
             player.party.remove(this);
-            game.addMessage(String.format("%s fainted!", name));
+            game.addMessage(String.format("%s fainted!", name), Color.RED);
         }
     }
 
     abstract void checkCritical(MysteryDungeonGame game);
 
+    void take(Coin c, MysteryDungeonGame game, MysteryDungeon dungeon){
+        player.money += c.value;
+        dungeon.removeFlat(c);
+        game.addMessage(String.format("%s picked up %s", name, c.name));
+    }
+
+    abstract void take(Item i, MysteryDungeonGame game, MysteryDungeon dungeon);
+
     void useFromBag(Item i, MysteryDungeonGame game){
         i.used(this);
         player.bag.remove(i);
         game.addMessage(String.format("%s used %s", name, i.name));
+        checkCritical(game);
     }
-
 
     public String toString(){
         String color;

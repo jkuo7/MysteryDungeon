@@ -9,16 +9,18 @@ public class Coin extends Holdable{
         value = v;
         symbol = "⍟";
         textColor = gold;
-        name = "Coin";
+        name = "$" + value;
     }
 
     void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){
-        a.take(this, dungeon);
+        a.take(this, game, dungeon);
     }
 
     void walkedOn(Player p, MysteryDungeonGame game, MysteryDungeon dungeon){
-        p.take(this, dungeon);
+        p.take(this, game,  dungeon);
     }
 
-
+    public String toString(){
+        return name;
+    }
 }

@@ -26,36 +26,30 @@ public class Player extends PartyMember{
         if(curHP <= maxHP * 0.2 && !critical){
             critical = true;
             game.setCritical(true);
-            game.addMessage(String.format("%s is low on health", name));
-//             game.addMessage(String.format("<html><font color=\"red\">%s is low on health</font></html>"), name);
+            game.addMessage(String.format("%s is low on health", name), Color.RED);
         } else if (curHP > maxHP * 0.2 && critical) {
             game.setCritical(false);
             critical = false;
         }
     }
 
-    void take(Coin c, MysteryDungeon dungeon){
-        money += c.value;
-        dungeon.removeFlat(c);
-        dungeon.game.addMessage(String.format("%s picked up %s", name, c.name));
+    void take(Item i, MysteryDungeonGame game, MysteryDungeon dungeon){
+        game.askItem(i);
     }
 
-    void take(Item i, MysteryDungeon dungeon){
-        dungeon.game.askItem(i);
-    }
-
-    void putInBag(Item i, MysteryDungeon dungeon){
+    void putInBag(Item i, MysteryDungeonGame game, MysteryDungeon dungeon, PartyMember pm){
         if(bag.size() < bagLimit){
             bag.add(i);
             dungeon.removeFlat(i);
+            game.addMessage(String.format("%s picked up %s", pm.name, i.name));
         }
-        dungeon.game.addMessage(String.format("%s picked up %s", name, i.name));
     }
 
-    void use(Item i, MysteryDungeon dungeon){
+    void use(Item i, MysteryDungeonGame game, MysteryDungeon dungeon){
         i.used(this);
         dungeon.removeFlat(i);
-        dungeon.game.addMessage(String.format("%s found and used %s", name, i.name));
+        game.addMessage(String.format("%s found and used %s", name, i.name));
+        checkCritical(game);
     }
 
     Object[] getBag(){

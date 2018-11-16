@@ -25,6 +25,8 @@ public class MysteryDungeon {
     Set<Enemy> enemies;
     private FlatOccupant[][] flatAt;
     private Creature[][] creatureAt;
+    private static final int MIN_ENEMIES = 5;
+    private static final int MAX_ENEMIES = 10;
 
     MysteryDungeonGame game;
 
@@ -422,16 +424,31 @@ public class MysteryDungeon {
     }
 
     private void addEnemies(){
-        int numEnemies = 5 + ran.nextInt(5);
+        int numEnemies = MIN_ENEMIES + ran.nextInt(MAX_ENEMIES - MIN_ENEMIES);
         for(int i = 0; i < numEnemies; i++) {
-            int x, y;
-            do {
-                x = 1 + ran.nextInt(WIDTH - 2);
-                y = 1 + ran.nextInt(HEIGHT - 2);
-            } while (!isRoom(x, y) || (x == goal.x && y == goal.y) || creatureAt[x][y] != null);
-            Enemy e = new Enemy(x, y);
-            creatureAt[x][y] = e;
-            enemies.add(e);
+            addEnemy();
+        }
+    }
+
+    private void addEnemy(){
+        int x, y;
+        do {
+            x = 1 + ran.nextInt(WIDTH - 2);
+            y = 1 + ran.nextInt(HEIGHT - 2);
+        } while (!isRoom(x, y) || (x == goal.x && y == goal.y) || creatureAt[x][y] != null);
+        Enemy e = new Enemy(x, y);
+        creatureAt[x][y] = e;
+        enemies.add(e);
+    }
+
+    private void addNewEnemies(){
+        for(int i = enemies.size(); i < MAX_ENEMIES; i++){
+            double rate = i < MIN_ENEMIES ? 0.25 : 0.5;
+            if(ran.nextDouble() < rate){
+                return;
+            } else {
+                addEnemy();
+            }
         }
     }
 
@@ -566,6 +583,11 @@ public class MysteryDungeon {
         }
         game.playerMoved();
         checkForFlats();
+//         checkForFlats(player);
+        if(game.moves() % 10 == 0){
+            addNewEnemies();
+            game.repaintDungeon();
+        }
         return true;
     }
 
@@ -649,11 +671,12 @@ public class MysteryDungeon {
         player.move(dir.dx(), dir.dy(), game);
     }
 
-    void checkForFlats(Enemy c){
-        if(flatAt[c.x][c.y] != null){
-            flatAt[c.x][c.y].walkedOn(c, game, this);
+    void checkForFlats(Enemy e){
+        if(flatAt[e.x][e.y] != null){
+            flatAt[e.x][e.y].walkedOn(e, game, this);
         }
     }
+
 
     void checkForFlats(Ally c){
         if(flatAt[c.x][c.y] != null){

@@ -36,11 +36,14 @@ public class MysteryDungeonGame extends JKGame {
     private static final int NUM_ALLIES = 3;
 
     private Queue<String> messages;
-    int statsWidth;
+    private Queue<Color> msgColors;
+
+    private int statsWidth;
 
     public MysteryDungeonGame(){
         this.setBackground(Color.BLACK);
         messages = new LinkedList<>();
+        msgColors = new LinkedList<>();
 
         bindKeyStrokeTo("enter.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), startGameAc());
         criticalTimer = new Timer(500, (ae) -> repaintStats());
@@ -120,6 +123,10 @@ public class MysteryDungeonGame extends JKGame {
         repaintGame();
     }
 
+    int moves(){
+        return moves;
+    }
+
     void repaintGame(){
         repaintDungeon();
         repaintHUD();
@@ -150,7 +157,7 @@ public class MysteryDungeonGame extends JKGame {
         } else {
             criticalTimer.stop();
             critical = false;
-            repaintHUD();
+            repaintStats();
         }
     }
 
@@ -165,9 +172,9 @@ public class MysteryDungeonGame extends JKGame {
                 null, options, options[0]);
 
         if(selectedValue.equals(JOptionPane.YES_OPTION)){
-            player.putInBag(i, dungeon);
+            player.putInBag(i, this, dungeon, player);
         } else if(selectedValue.equals(JOptionPane.NO_OPTION)){
-            player.use(i, dungeon);
+            player.use(i, this, dungeon);
         }
         repaintGame();
     }
@@ -352,7 +359,11 @@ public class MysteryDungeonGame extends JKGame {
         String items = String.format("ITEMS: %2d/%-2d", player.bag.size(), player.bagLimit);
         String info = floor + "     " + money + "     " + items;
 
-        g2d.drawString(info, TILE_SIZE + fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     "), HUD_HEIGHT - fm.getHeight() + fm.getAscent());
+        if(statsWidth == 0){
+            statsWidth = fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     ");
+        }
+
+        g2d.drawString(info, TILE_SIZE + statsWidth, HUD_HEIGHT - fm.getHeight() + fm.getAscent());
         paintMsg(g2d, fm);
     }
 
@@ -361,19 +372,26 @@ public class MysteryDungeonGame extends JKGame {
         String hp = String.format("HP: %3d/%-3d", (int) Math.ceil(player.curHP), player.maxHP);
         String belly = String.format("BELLY: %3d/%-3d", (int) Math.ceil(player.curBelly), player.maxBelly);
         String hud = hp + "     " + belly;
-        statsWidth = fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     ");
         g2d.drawString(hud, TILE_SIZE, HUD_HEIGHT - fm.getHeight() + fm.getAscent());
     }
 
     private void paintMsg(Graphics2D g2d, FontMetrics fm){
         if(!messages.isEmpty()){
+            g2d.setColor(msgColors.remove());
             String msg = messages.remove();
             g2d.drawString(msg, GAME_WIDTH - TILE_SIZE - fm.stringWidth(msg), HUD_HEIGHT - fm.getHeight() + fm.getAscent());
         }
     }
 
+    /** Adds a message to be displayed in top-right corner in default color of white */
     void addMessage(String msg){
+        addMessage(msg, Color.WHITE);
+    }
+
+    /** Adds a message to be displayed in top-right corner in given color */
+    void addMessage(String msg, Color color){
         messages.add(msg);
+        msgColors.add(color);
     }
 
     /** Helper function to repaint only the info portion of the HUD */
@@ -387,7 +405,7 @@ public class MysteryDungeonGame extends JKGame {
     }
 
     /** Helper function to repaint only the dungeon */
-    private void repaintDungeon(){
+    void repaintDungeon(){
         repaint(0, HUD_HEIGHT, GAME_WIDTH, GAME_HEIGHT - HUD_HEIGHT);
     }
 

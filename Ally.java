@@ -27,18 +27,14 @@ public class Ally extends PartyMember{
     void checkCritical(MysteryDungeonGame game){
         if(curHP <= maxHP * 0.2 && !critical){
             critical = true;
-            game.addMessage(String.format("%s is low on health", name));
+            game.addMessage(String.format("%s is low on health", name), Color.RED);
         } else if (curHP > maxHP * 0.2 && critical) {
             critical = false;
         }
     }
 
-    void take(Coin c, MysteryDungeon dungeon){
-        player.take(c, dungeon);
-    }
-
-    void take(Item i, MysteryDungeon dungeon){
-        player.putInBag(i, dungeon);
+    void take(Item i, MysteryDungeonGame game, MysteryDungeon dungeon){
+        player.putInBag(i, game, dungeon, this);
     }
 
 }
