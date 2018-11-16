@@ -9,11 +9,14 @@ public abstract class Creature extends Occupant{
         super(i, j);
         canBeWalkedOn = false;
     }
-
     void move(int dx, int dy, MysteryDungeonGame game){
+        move(dx, dy);
+        checkHealth(game);
+    }
+
+    void move(int dx, int dy){
         x += dx;
         y += dy;
-        checkHealth(game);
     }
 
     abstract void checkHealth(MysteryDungeonGame game);

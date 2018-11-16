@@ -58,9 +58,8 @@ public abstract class PartyMember extends Creature{
             color = String.format("<html><font color=\"#%02x%02x%02x\">",
                     textColor.getRed(), textColor.getGreen(), textColor.getBlue());
         }
-        String status = String.format("%s (HP: %d/%d, Belly: %d/%d)</font></html>",
-                name, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly);
-        return color + status;
+        return String.format("%s%s (HP: %d/%d, Belly: %d/%d)</font></html>",
+                color, name, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly);
     }
 
 }

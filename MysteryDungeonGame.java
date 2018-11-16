@@ -135,11 +135,6 @@ public class MysteryDungeonGame extends JKGame {
         }
     }
 
-    void outOfHP(){
-        gameOver(String.format("Ran out of HP!\nFloors cleared: %d\n$%d collected", curFloor - 1, player.money),
-                "Game Over!");
-    }
-
     void outOfHP(Creature c){
         if(c.equals(player)){
             gameOver(String.format("Ran out of HP!\nFloors cleared: %d\n$%d collected", curFloor - 1, player.money),

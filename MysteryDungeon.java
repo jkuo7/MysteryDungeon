@@ -666,7 +666,7 @@ public class MysteryDungeon {
 
     void swapWithAlly(Direction dir){
         creatureAt[player.x][player.y] = creatureAt[player.x + dir.dx()][player.y + dir.dy()];
-        creatureAt[player.x + dir.dx()][player.y + dir.dy()].move(- dir.dx(), - dir.dy(), game);
+        creatureAt[player.x + dir.dx()][player.y + dir.dy()].move(- dir.dx(), - dir.dy());
         creatureAt[player.x + dir.dx()][player.y + dir.dy()] = player;
         player.move(dir.dx(), dir.dy(), game);
     }
