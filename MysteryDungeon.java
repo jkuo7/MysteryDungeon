@@ -33,9 +33,13 @@ public class MysteryDungeon {
     /** Directions UP, LEFT, DOWN, RIGHT, and STAY for movement */
     enum Direction{
         UP (0, -1),
+        UP_LEFT (-1, -1),
         LEFT (-1, 0),
+        DOWN_LEFT (-1, 1),
         DOWN (0, 1),
+        DOWN_RIGHT (1, 1),
         RIGHT (1, 0),
+        UP_RIGHT (1, -1),
         STAY (0, 0);
 
         private final int dx, dy;
@@ -411,16 +415,10 @@ public class MysteryDungeon {
             y = player.y + ran.nextInt(2);
         } while(!isRoom(x, y) || (x == goal.x && y == goal.y) || creatureAt[x][y] != null);
 
-//         for(Direction dir: Direction.values()){
-//             int x = player.x + dir.dx();
-//             int y = player.y + dir.dy();
-//             if(isRoom(x, y) && creatureAt[x][y] == null){
         a.x = x;
         a.y = y;
         creatureAt[x][y] = a;
-//                 return;
-//             }
-//         }
+
     }
 
     private void addEnemies(){
@@ -435,7 +433,7 @@ public class MysteryDungeon {
         do {
             x = 1 + ran.nextInt(WIDTH - 2);
             y = 1 + ran.nextInt(HEIGHT - 2);
-        } while (!isRoom(x, y) || (x == goal.x && y == goal.y) || creatureAt[x][y] != null);
+        } while (!isRoom(x, y) || flatAt[x][y] != null || creatureAt[x][y] != null);
         Enemy e = new Enemy(x, y);
         creatureAt[x][y] = e;
         enemies.add(e);
@@ -465,7 +463,7 @@ public class MysteryDungeon {
             do{
                 x = 1 + ran.nextInt(WIDTH - 2);
                 y = 1 + ran.nextInt(HEIGHT - 2);
-            } while(!isRoom(x, y) || (flatAt[x][y] != null));
+            } while(!isRoom(x, y) || flatAt[x][y] != null || creatureAt[x][y] != null);
             Coin c = new Coin(x, y, 10 + 10 * ran.nextInt(20));
             flatAt[x][y] = c;
             flatOccupants.add(c);
@@ -479,7 +477,7 @@ public class MysteryDungeon {
             do{
                 x = 1 + ran.nextInt(WIDTH - 2);
                 y = 1 + ran.nextInt(HEIGHT - 2);
-            } while(!isRoom(x, y) || (flatAt[x][y] != null));
+            } while(!isRoom(x, y) || flatAt[x][y] != null || creatureAt[x][y] != null);
             Apple a = new Apple(x, y, ran);
             flatAt[x][y] = a;
             flatOccupants.add(a);
@@ -493,7 +491,7 @@ public class MysteryDungeon {
             do{
                 x = 1 + ran.nextInt(WIDTH - 2);
                 y = 1 + ran.nextInt(HEIGHT - 2);
-            } while(!isRoom(x, y) || (flatAt[x][y] != null));
+            } while(!isRoom(x, y) || flatAt[x][y] != null || creatureAt[x][y] != null);
             Berry b = new Berry(x, y, ran);
             flatAt[x][y] = b;
             flatOccupants.add(b);
@@ -576,14 +574,13 @@ public class MysteryDungeon {
         }
         movePlayer(dir);
         for(Ally a: player.allies){
-            moveAlly(a, dir);
+            moveAlly(a);
         }
         for(Enemy e: enemies){
             moveEnemy(e);
         }
         game.playerMoved();
         checkForFlats();
-//         checkForFlats(player);
         if(game.moves() % 10 == 0){
             addNewEnemies();
             game.repaintDungeon();
@@ -600,25 +597,32 @@ public class MysteryDungeon {
         markSeen();
     }
 
-    void moveAlly(Ally a, Direction dir){
+    void moveAlly(Ally a){
         List<Direction> open = getOpenDirections(a);
-        List<Direction> toPlayer = towardPlayer(a);
         if(open.size() == 0){
             moveCreature(a, Direction.STAY);
-        } else if(toPlayer.size() > 0 && validMove(a, toPlayer.get(0)) && ran.nextDouble() < 0.75){
-            moveCreature(a, toPlayer.get(0));
-        } else if(toPlayer.size() > 1 && validMove(a, toPlayer.get(1)) && ran.nextDouble() < 1){
-            moveCreature(a, toPlayer.get(1));
+        } else if(moveTowardsPlayer(a)){
         } else {
             moveCreature(a, open.get(ran.nextInt(open.size())));
         }
         checkForFlats(a);
     }
 
-    List<Direction> towardPlayer(Ally a){
+    boolean moveTowardsPlayer(Ally a){
+        List<Direction> toPlayer = towardPlayer(a);
+        for(Direction dir : toPlayer){
+            if(validMove(a, dir) && ran.nextDouble() < 0.75){
+                moveCreature(a, dir);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    List<Direction> towardPlayer(Creature c){
         List<Direction> toPlayer = new ArrayList<>(2);
-        int hDist = a.x - player.x;
-        int vDist = a.y - player.y;
+        int hDist = c.x - player.x;
+        int vDist = c.y - player.y;
         if(Math.abs(hDist) > Math.abs(vDist)){
             if(vDist != 0) {
                 toPlayer.add(vDist > 0 ? Direction.UP : Direction.DOWN);
@@ -630,6 +634,13 @@ public class MysteryDungeon {
             }
             toPlayer.add(vDist > 0 ? Direction.UP : Direction.DOWN);
         }
+         if(vDist != 0 && hDist != 0){
+             if(hDist > 0){
+                 toPlayer.add(vDist > 0 ? Direction.UP_LEFT : Direction.DOWN_LEFT);
+             } else {
+                 toPlayer.add(vDist > 0 ? Direction.UP_RIGHT : Direction.DOWN_RIGHT);
+             }
+         }
         return toPlayer;
     }
 
@@ -641,11 +652,23 @@ public class MysteryDungeon {
         List<Direction> open = getOpenDirections(e);
         if(open.size() == 0){
             moveCreature(e, Direction.STAY);
+        } else if(regions[e.x][e.y] == regions[player.x][player.y] && moveTowardsPlayer(e)){
         } else if (!validMove(e, e.lastDir) || ran.nextDouble() < 0.5){
             e.lastDir = open.get(ran.nextInt(open.size()));
         }
         moveCreature(e, e.lastDir);
         checkForFlats(e);
+    }
+
+    boolean moveTowardsPlayer(Enemy e){
+        List<Direction> toPlayer = towardPlayer(e);
+        for(Direction dir : toPlayer){
+            if(validMove(e, dir) && ran.nextDouble() < 0.75){
+                e.lastDir = dir;
+                return true;
+            }
+        }
+        return false;
     }
 
     List<Direction> getOpenDirections(Creature c){

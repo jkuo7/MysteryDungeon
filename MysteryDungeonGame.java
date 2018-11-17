@@ -86,6 +86,12 @@ public class MysteryDungeonGame extends JKGame {
         bindKeyStrokeTo("d.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), moveAc(MysteryDungeon.Direction.RIGHT));
         bindKeyStrokeTo("w.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), moveAc(MysteryDungeon.Direction.UP));
         bindKeyStrokeTo("s.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), moveAc(MysteryDungeon.Direction.DOWN));
+
+         bindKeyStrokeTo("q.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_Q, 0), moveAc(MysteryDungeon.Direction.UP_LEFT));
+         bindKeyStrokeTo("e.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), moveAc(MysteryDungeon.Direction.UP_RIGHT));
+         bindKeyStrokeTo("z.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0), moveAc(MysteryDungeon.Direction.DOWN_LEFT));
+         bindKeyStrokeTo("x.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), moveAc(MysteryDungeon.Direction.DOWN_RIGHT));
+
         bindKeyStrokeTo("space.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), moveAc(MysteryDungeon.Direction.STAY));
         bindKeyStrokeTo("i.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_I, 0), bagAc());
         bindKeyStrokeTo("k.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_K, 0), partyAc());
@@ -95,7 +101,9 @@ public class MysteryDungeonGame extends JKGame {
         return new AbstractAction(){
             @Override
             public void actionPerformed(ActionEvent ae){
-                dungeon.playerTurn(dir);
+                if(!betweenFloors){
+                    dungeon.playerTurn(dir);
+                }
             }
         };
     }
@@ -104,7 +112,9 @@ public class MysteryDungeonGame extends JKGame {
         return new AbstractAction(){
             @Override
             public void actionPerformed(ActionEvent ae){
-                showBag();
+                if(!betweenFloors){
+                    showBag();
+                }
             }
         };
     }
@@ -113,7 +123,9 @@ public class MysteryDungeonGame extends JKGame {
         return new AbstractAction(){
             @Override
             public void actionPerformed(ActionEvent ae){
-                showParty();
+                if(!betweenFloors){
+                    showParty();
+                }
             }
         };
     }
