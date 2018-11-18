@@ -10,13 +10,9 @@ public class Goal extends FlatOccupant{
         textColor = purple;
     }
 
-    void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){
-        return;
-    }
+    void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){}
 
-    void walkedOn(Enemy e, MysteryDungeonGame game, MysteryDungeon dungeon){
-        return;
-    }
+    void walkedOn(Enemy e, MysteryDungeonGame game, MysteryDungeon dungeon){}
 
     void walkedOn(Player p, MysteryDungeonGame game, MysteryDungeon dungeon){
         game.askNextFloor();

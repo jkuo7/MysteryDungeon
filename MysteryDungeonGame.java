@@ -340,7 +340,16 @@ public class MysteryDungeonGame extends JKGame {
 
     private void paintOccupant(Graphics2D g2d, FontMetrics fm, Occupant o){
         g2d.setColor(o.textColor);
-        g2d.drawString(o.symbol, o.x * TILE_SIZE + (TILE_SIZE - fm.stringWidth(o.symbol))/2, o.y * TILE_SIZE + HUD_HEIGHT + (TILE_SIZE - fm.getHeight()) / 2 + fm.getAscent());
+
+        if(o.facing.angle() == 0){
+            g2d.drawString(o.symbol, o.x * TILE_SIZE + (TILE_SIZE - fm.stringWidth(o.symbol))/2, o.y * TILE_SIZE + HUD_HEIGHT + (TILE_SIZE - fm.getHeight()) / 2 + fm.getAscent());
+        } else {
+            g2d.translate(o.x * TILE_SIZE + TILE_SIZE/2, o.y * TILE_SIZE + HUD_HEIGHT + TILE_SIZE/2);
+            g2d.rotate(Math.toRadians(o.facing.angle()));
+            g2d.drawString(o.symbol, -TILE_SIZE/2 + (TILE_SIZE - fm.stringWidth(o.symbol))/2, -TILE_SIZE/2 + (TILE_SIZE - fm.getHeight()) / 2 + fm.getAscent());
+            g2d.rotate(-Math.toRadians(o.facing.angle()));
+            g2d.translate(-(o.x * TILE_SIZE + TILE_SIZE/2), -(o.y * TILE_SIZE + HUD_HEIGHT + TILE_SIZE/2));
+        }
     }
 
     private void paintHUD(Graphics2D g2d){

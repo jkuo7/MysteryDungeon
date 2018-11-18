@@ -20,6 +20,7 @@ public class Player extends PartyMember{
         name = "Player";
         player = this;
         party.add(this);
+        facing = MysteryDungeon.Direction.DOWN;
     }
 
     void checkCritical(MysteryDungeonGame game){
