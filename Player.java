@@ -9,6 +9,7 @@ public class Player extends PartyMember{
     Set<Ally> allies;
     int bagLimit = 20;
 
+
     Player(int i, int j){
         super(i, j);
         isPlayer = true;
@@ -20,7 +21,6 @@ public class Player extends PartyMember{
         name = "Player";
         player = this;
         party.add(this);
-        facing = MysteryDungeon.Direction.DOWN;
     }
 
     void checkCritical(MysteryDungeonGame game){
@@ -43,6 +43,8 @@ public class Player extends PartyMember{
             bag.add(i);
             dungeon.removeFlat(i);
             game.addMessage(String.format("%s picked up %s", pm.name, i.name));
+        } else {
+            game.addMessage("Bag is full!");
         }
     }
 

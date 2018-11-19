@@ -9,15 +9,19 @@ public abstract class PartyMember extends Creature{
 
     PartyMember(int i, int j){
         super(i, j);
+        maxHP = 200;
+        curHP = maxHP;
+        attack = 10;
         isEnemy = false;
     }
 
     void move(int dx, int dy, MysteryDungeonGame game){
+        checkHunger();
         super.move(dx, dy, game);
         checkCritical(game);
     }
 
-    void checkHealth(MysteryDungeonGame game){
+    void checkHunger(){
         if(curBelly <= 0){
             curHP = Math.max(0, curHP - 1);
         } else {
@@ -26,11 +30,30 @@ public abstract class PartyMember extends Creature{
                 curHP = Math.min(maxHP, curHP + maxHP * hPRegen);
             }
         }
+    }
+
+    void checkHealth(MysteryDungeonGame game){
         if(curHP == 0){
             game.outOfHP(this);
             player.party.remove(this);
             game.addMessage(String.format("%s fainted!", name), Color.RED);
         }
+    }
+
+    void attacks(Creature c, MysteryDungeonGame game){
+        super.attacks(c, game);
+        if(c.curHP <= 0){
+            game.addMessage(String.format("%s fainted %s!", name, c.name));
+        } else {
+            game.addMessage(String.format("%s attacked %s", name, c.name));
+        }
+        checkHunger();
+        checkHealth(game);
+    }
+
+    void attackedFor(int a, MysteryDungeonGame game){
+        game.addMessage(String.format("%s attacked for %d damage", name, a));
+        super.attackedFor(a, game);
     }
 
     abstract void checkCritical(MysteryDungeonGame game);

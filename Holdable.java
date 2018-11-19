@@ -11,4 +11,8 @@ public abstract class Holdable extends FlatOccupant{
         e.take(this, dungeon);
     }
 
+    void droppedAt(int i, int j){
+        x = i;
+        y = j;
+    }
 }

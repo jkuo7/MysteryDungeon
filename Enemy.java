@@ -9,6 +9,10 @@ public class Enemy extends Creature{
     Enemy(int i, int j){
         super(i, j);
         isEnemy = true;
+        maxHP = 100;
+        curHP = maxHP;
+        attack = 5;
+
         symbol = "♉";
         textColor = Color.BLUE;
         enemyNumber = enemyTotal;

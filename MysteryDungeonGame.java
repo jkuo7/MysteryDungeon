@@ -102,7 +102,12 @@ public class MysteryDungeonGame extends JKGame {
             @Override
             public void actionPerformed(ActionEvent ae){
                 if(!betweenFloors){
-                    dungeon.playerTurn(dir);
+                    if(player.facing == dir || dir == MysteryDungeon.Direction.STAY) {
+                        dungeon.playerTurn(dir);
+                    } else {
+                        player.facing = dir;
+                        repaintPlayer();
+                    }
                 }
             }
         };
@@ -276,8 +281,9 @@ public class MysteryDungeonGame extends JKGame {
             g2d.setFont(new Font("Consolas", Font.BOLD, 30));
             g2d.setColor(Color.WHITE);
             FontMetrics fm = g2d.getFontMetrics();
-            g2d.drawString("WASD to move", (GAME_WIDTH - fm.stringWidth("WASD to move"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 100);
-            g2d.drawString("SPACE to idle", (GAME_WIDTH - fm.stringWidth("SPACE to idle"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 50);
+            g2d.drawString("WASD to move", (GAME_WIDTH - fm.stringWidth("WASD to move"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 150);
+            g2d.drawString("Q/E/Z/X to move NW/NE/SW/SE", (GAME_WIDTH - fm.stringWidth("Q/E/Z/X to move NW/NE/SW/SE"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 100);
+            g2d.drawString("SPACE to attack/idle", (GAME_WIDTH - fm.stringWidth("SPACE to attack/idle"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 50);
             g2d.drawString("I to view inventory", (GAME_WIDTH - fm.stringWidth("I to view inventory"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent());
             g2d.drawString("K to view party", (GAME_WIDTH - fm.stringWidth("K to view party"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 50);
             g2d.drawString("-Press Enter to Start-", (GAME_WIDTH - fm.stringWidth("-Press Enter to Start-"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 150);
@@ -423,6 +429,11 @@ public class MysteryDungeonGame extends JKGame {
     /** Helper function to repaint only the dungeon */
     void repaintDungeon(){
         repaint(0, HUD_HEIGHT, GAME_WIDTH, GAME_HEIGHT - HUD_HEIGHT);
+    }
+
+    /** Helper function to repaint only the player (for rotations) */
+    void repaintPlayer(){
+        repaint(player.x * TILE_SIZE, player.y * TILE_SIZE + HUD_HEIGHT, TILE_SIZE, TILE_SIZE);
     }
 
     public static void main(String[] args){

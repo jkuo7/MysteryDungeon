@@ -579,7 +579,13 @@ public class MysteryDungeon {
                                 creatureAt[player.x + dir.dx()][player.y + dir.dy()].isEnemy))) {
             return false;
         }
-        movePlayer(dir);
+        if(dir == Direction.STAY &&
+                creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()] != null &&
+                creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()].isEnemy){
+            player.attacks(creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()], game);
+        } else {
+            movePlayer(dir);
+        }
         for(Ally a: player.allies){
             moveAlly(a);
         }
@@ -605,25 +611,74 @@ public class MysteryDungeon {
     }
 
     private void moveAlly(Ally a){
+        if(a.curTarget != null && adjacentToTarget(a)){
+            turnToTarget(a);
+            a.attacks(a.curTarget, game);
+            return;
+        }
+        List<Direction> adj = adjacentEnemies(a);
+        if(adj.size() != 0){
+            a.facing = adj.get(ran.nextInt(adj.size()));
+            a.curTarget = creatureAt[a.x + a.facing.dx()][a.y + a.facing.dy()];
+            a.attacks(a.curTarget, game);
+            return;
+        }
         List<Direction> open = getOpenDirections(a);
         if(open.size() == 0){
             moveCreature(a, Direction.STAY);
-        } else if((regions[a.x][a.y] == regions[player.x][player.y] ||
-                    (Math.abs(a.x - player.x) <= fieldOfView && Math.abs(a.y - player.y) <= fieldOfView))
-                && moveTowardsPlayer(a)){
+        } else if(
+//                (regions[a.x][a.y] == regions[player.x][player.y] ||
+//                    (Math.abs(a.x - player.x) <= fieldOfView && Math.abs(a.y - player.y) <= fieldOfView)) &&
+                moveTowardsPlayer(a)){
         } else {
             moveCreature(a, open.get(ran.nextInt(open.size())));
         }
         checkForFlats(a);
     }
 
+    private boolean adjacentToTarget(Creature c){
+        return Math.abs(c.x - c.curTarget.x) < 2 && Math.abs(c.y - c.curTarget.y) < 2;
+    }
+
+    private void turnToTarget(Creature c){
+        switch(c.x - c.curTarget.x){
+            case 1: switch(c.y - c.curTarget.y){
+                case 1: c.facing = Direction.UP_LEFT; break;
+                case 0: c.facing = Direction.LEFT; break;
+                case -1: c.facing = Direction.DOWN_LEFT; break;
+            } break;
+            case 0: switch(c.y - c.curTarget.y){
+                case 1: c.facing = Direction.UP; break;
+                case -1: c.facing = Direction.DOWN; break;
+            } break;
+            case -1: switch(c.y - c.curTarget.y){
+                case 1: c.facing = Direction.UP_RIGHT; break;
+                case 0: c.facing = Direction.RIGHT; break;
+                case -1: c.facing = Direction.DOWN_RIGHT; break;
+            } break;
+        }
+    }
+
+    private List<Direction> adjacentEnemies(Ally a){
+        List<Direction> adj = new ArrayList<>(8);
+        for(Direction dir: Direction.values()){
+            Creature c = creatureAt[a.x + dir.dx()][a.y + dir.dy()];
+            if(c != null && c.isEnemy){
+                adj.add(dir);
+            }
+        }
+        return adj;
+    }
+
     private boolean moveTowardsPlayer(Ally a){
         List<Direction> toTarget = towardTarget(a, player);
+        double rate = 1 - 0.125 * (toTarget.size() - 1);
         for(Direction dir : toTarget){
-            if(validMove(a, dir) && ran.nextDouble() < 0.75){
+            if(validMove(a, dir) && ran.nextDouble() < rate){
                 moveCreature(a, dir);
                 return true;
             }
+            rate += 0.125;
         }
         return false;
     }
@@ -658,6 +713,18 @@ public class MysteryDungeon {
     }
 
     private void moveEnemy(Enemy e){
+        if(e.curTarget != null && adjacentToTarget(e) && ran.nextDouble() < 0.8){
+            turnToTarget(e);
+            e.attacks(e.curTarget, game);
+            return;
+        }
+        List<Direction> adj = adjacentEnemies(e);
+        if(adj.size() != 0 && ran.nextDouble() < 0.8){
+            e.facing = adj.get(ran.nextInt(adj.size()));
+            e.curTarget = creatureAt[e.x + e.facing.dx()][e.y + e.facing.dy()];
+            e.attacks(e.curTarget, game);
+            return;
+        }
         List<Direction> open = getOpenDirections(e);
         if(open.size() == 0){
             moveCreature(e, Direction.STAY);
@@ -667,6 +734,17 @@ public class MysteryDungeon {
         }
         moveCreature(e, e.lastDir);
         checkForFlats(e);
+    }
+
+    private List<Direction> adjacentEnemies(Enemy e){
+        List<Direction> adj = new ArrayList<>(8);
+        for(Direction dir: Direction.values()){
+            Creature c = creatureAt[e.x + dir.dx()][e.y + dir.dy()];
+            if(c != null && !c.isEnemy){
+                adj.add(dir);
+            }
+        }
+        return adj;
     }
 
     private boolean moveTowardsParty(Enemy e){
@@ -754,10 +832,16 @@ public class MysteryDungeon {
     void removeCreature (Creature c){
         creatureAt[c.x][c.y] = null;
         if(c.isEnemy) {
+            for(Ally a: player.allies){
+                if(a.curTarget == c){
+                    a.curTarget = null;
+                }
+            }
             Enemy e = (Enemy) c;
             enemies.remove(e);
             if (e.held != null) {
                 flatAt[e.x][e.y] = e.held;
+                e.held.droppedAt(e.x, e.y);
                 flatOccupants.add(e.held);
             }
         }

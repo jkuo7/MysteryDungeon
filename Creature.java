@@ -1,9 +1,10 @@
 public abstract class Creature extends Occupant{
     boolean isEnemy;
     boolean isPlayer = false;
-    int maxHP = 100;
-    double curHP = maxHP;
+    int maxHP, attack;
+    double curHP;
     String name;
+    Creature curTarget;
 
     Creature(int i, int j){
         super(i, j);
@@ -20,5 +21,14 @@ public abstract class Creature extends Occupant{
     }
 
     abstract void checkHealth(MysteryDungeonGame game);
+
+    void attacks(Creature c, MysteryDungeonGame game){
+        c.attackedFor(attack, game);
+    }
+
+    void attackedFor(int a, MysteryDungeonGame game){
+        curHP = Math.max(0, curHP - a);
+        checkHealth(game);
+    }
 
 }
