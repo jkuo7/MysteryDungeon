@@ -45,14 +45,14 @@ public abstract class PartyMember extends Creature{
         if(c.curHP <= 0){
             game.addMessage(String.format("%s fainted %s!", name, c.name));
         } else {
-            game.addMessage(String.format("%s attacked %s", name, c.name));
+            game.addMessage(String.format("%s attacked %s for %d damage", name, c.name, attack));
         }
         checkHunger();
         checkHealth(game);
     }
 
     void attackedFor(int a, MysteryDungeonGame game){
-        game.addMessage(String.format("%s attacked for %d damage", name, a));
+        game.addMessage(String.format("%s attacked for %d damage", name, a), Color.RED);
         super.attackedFor(a, game);
     }
 

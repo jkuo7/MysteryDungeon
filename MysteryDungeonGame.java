@@ -76,6 +76,13 @@ public class MysteryDungeonGame extends JKGame {
     private void startGame(){
         gameNotStart = false;
         timer.stop();
+        timer = new Timer(500, (ae) ->{
+            repaint();
+            countdown--;
+            if(countdown == 0){
+                toNextFloor();
+            }
+        });
         repaint();
         bindKeyStrokes();
     }
@@ -240,13 +247,7 @@ public class MysteryDungeonGame extends JKGame {
         if(critical){
             criticalTimer.stop();
         }
-        timer = new Timer(500, (ae) ->{
-            repaint();
-            countdown--;
-            if(countdown == 0){
-                toNextFloor();
-            }
-        });
+
         timer.start();
         dungeon = new MysteryDungeon(dungeon.nextFloorSeed(), this, player);
     }
