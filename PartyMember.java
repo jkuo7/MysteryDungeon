@@ -1,7 +1,7 @@
 import java.awt.Color;
 
 public abstract class PartyMember extends Creature{
-    double hPRegen = 0.005;
+    private double hPRegen = 0.005;
     int maxBelly = 100;
     double curBelly = maxBelly;
     Player player;
@@ -23,7 +23,7 @@ public abstract class PartyMember extends Creature{
         checkCritical(game);
     }
 
-    void checkHunger(){
+    private void checkHunger(){
         if(curBelly <= 0){
             curHP = Math.max(0, curHP - 1);
         } else {
@@ -61,14 +61,14 @@ public abstract class PartyMember extends Creature{
         super.attackedFor(a, game);
     }
 
-    void getExp(int e, MysteryDungeonGame game){
+    private void getExp(int e, MysteryDungeonGame game){
         exp += e;
         while(exp >= level * 100){
             levelUp(game);
         }
     }
 
-    void levelUp(MysteryDungeonGame game){
+    private void levelUp(MysteryDungeonGame game){
         exp -= level * 100;
         level++;
         maxHP += 20;

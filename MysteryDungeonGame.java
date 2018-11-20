@@ -20,7 +20,7 @@ public class MysteryDungeonGame extends JKGame {
     private int countdown;
 
     private boolean critical = false;
-    private boolean criticalFlicker;
+    private boolean criticalFlicker = true;
 
     private int curFloor = 1;
     private int maxFloor = 2;
@@ -28,7 +28,7 @@ public class MysteryDungeonGame extends JKGame {
     private int moves = 0;
 
     private Timer timer;
-    private Timer criticalTimer;
+    private Timer messageTimer;
 
     private MysteryDungeon dungeon;
 
@@ -37,8 +37,11 @@ public class MysteryDungeonGame extends JKGame {
 
     private Queue<String> messages;
     private Queue<Color> msgColors;
+    private String nextMsg = "";
+    private Color nextColor;
 
     private int statsWidth;
+    private int infoWidth;
 
     public MysteryDungeonGame(){
         this.setBackground(Color.BLACK);
@@ -46,7 +49,13 @@ public class MysteryDungeonGame extends JKGame {
         msgColors = new LinkedList<>();
 
         bindKeyStrokeTo("enter.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), startGameAc());
-        criticalTimer = new Timer(500, (ae) -> repaintStats());
+        messageTimer = new Timer(500, (ae) -> {
+            repaintMessages();
+            if(critical){
+                repaintStats();
+            }
+        });
+
         timer = new Timer(750, (ae) -> repaint());
         timer.start();
 
@@ -85,6 +94,7 @@ public class MysteryDungeonGame extends JKGame {
         });
         repaint();
         bindKeyStrokes();
+        messageTimer.start();
     }
 
     /** Binds keys to game actions */
@@ -171,10 +181,7 @@ public class MysteryDungeonGame extends JKGame {
     void setCritical(boolean b){
         if(b){
             critical = true;
-            criticalFlicker = true;
-            criticalTimer.start();
         } else {
-            criticalTimer.stop();
             critical = false;
             repaintStats();
         }
@@ -244,9 +251,7 @@ public class MysteryDungeonGame extends JKGame {
         flicker = true;
         curFloor++;
         countdown = 6;
-        if(critical){
-            criticalTimer.stop();
-        }
+        messageTimer.stop();
 
         timer.start();
         dungeon = new MysteryDungeon(dungeon.nextFloorSeed(), this, player);
@@ -256,9 +261,7 @@ public class MysteryDungeonGame extends JKGame {
         timer.stop();
         betweenFloors = false;
         addMessage(String.format("Reached floor %d!", curFloor));
-        if(critical){
-            criticalTimer.start();
-        }
+        messageTimer.start();
         repaintGame();
     }
 
@@ -387,6 +390,10 @@ public class MysteryDungeonGame extends JKGame {
             statsWidth = fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     ");
         }
 
+        if(infoWidth == 0){
+            infoWidth = fm.stringWidth(info + "     ");
+        }
+
         g2d.drawString(info, TILE_SIZE + statsWidth, HUD_HEIGHT - fm.getHeight() + fm.getAscent());
         paintMsg(g2d, fm);
     }
@@ -400,11 +407,8 @@ public class MysteryDungeonGame extends JKGame {
     }
 
     private void paintMsg(Graphics2D g2d, FontMetrics fm){
-        if(!messages.isEmpty()){
-            g2d.setColor(msgColors.remove());
-            String msg = messages.remove();
-            g2d.drawString(msg, GAME_WIDTH - TILE_SIZE - fm.stringWidth(msg), HUD_HEIGHT - fm.getHeight() + fm.getAscent());
-        }
+        g2d.setColor(nextColor);
+        g2d.drawString(nextMsg, GAME_WIDTH - TILE_SIZE - fm.stringWidth(nextMsg), HUD_HEIGHT - fm.getHeight() + fm.getAscent());
     }
 
     /** Adds a message to be displayed in top-right corner in default color of white */
@@ -418,17 +422,31 @@ public class MysteryDungeonGame extends JKGame {
         msgColors.add(color);
     }
 
-    /** Helper function to repaint only the info portion of the HUD */
-    private void repaintHUD(){
-        repaint(statsWidth, 0, GAME_WIDTH - statsWidth, HUD_HEIGHT);
-    }
-
     /** Helper function to repaint only the stats portion of the HUD */
     private void repaintStats(){
         repaint(0, 0, statsWidth, HUD_HEIGHT);
     }
 
-    /** Helper function to repaint only the dungeon */
+    /** Helper function to repaint only the info portion of the HUD */
+    private void repaintHUD(){
+        repaint(statsWidth, 0, infoWidth, HUD_HEIGHT);
+    }
+
+    /** Helper function to repaint only the messages portion of the HUD */
+    private void repaintMessages() {
+        if (criticalFlicker) {
+            if (!messages.isEmpty()) {
+                nextColor = msgColors.remove();
+                nextMsg = messages.remove();
+            }
+        } else {
+            nextMsg = "";
+        }
+        repaint(statsWidth + infoWidth, 0, GAME_WIDTH - statsWidth - infoWidth, HUD_HEIGHT);
+        criticalFlicker = !criticalFlicker;
+    }
+
+        /** Helper function to repaint only the dungeon */
     void repaintDungeon(){
         repaint(0, HUD_HEIGHT, GAME_WIDTH, GAME_HEIGHT - HUD_HEIGHT);
     }

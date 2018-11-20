@@ -77,6 +77,8 @@ public class MysteryDungeon {
                 default: return STAY;
             }
         }
+
+        private static final Direction[] vals = values();
     }
 
 
@@ -646,7 +648,8 @@ public class MysteryDungeon {
             moveCreature(a, Direction.STAY);
         } else if(
                 (regions[a.x][a.y] == regions[player.x][player.y] ||
-                        (Math.abs(a.x - player.x) <= fieldOfView && Math.abs(a.y - player.y) <= fieldOfView)) &&
+                        (Math.abs(a.x - player.x) <= fieldOfView && Math.abs(a.y - player.y) <= fieldOfView) ||
+                        ran.nextDouble() < 0.75) &&
                         moveTowardsPlayer(a)){
         } else {
             moveCreature(a, open.get(ran.nextInt(open.size())));
@@ -679,7 +682,7 @@ public class MysteryDungeon {
 
     private List<Direction> adjacentEnemies(Creature a){
         List<Direction> adj = new ArrayList<>(8);
-        for(Direction dir: Direction.values()){
+        for(Direction dir: Direction.vals){
             Creature c = creatureAt[a.x + dir.dx()][a.y + dir.dy()];
             if(c != null && c.isEnemy != a.isEnemy){
                 adj.add(dir);
@@ -779,7 +782,7 @@ public class MysteryDungeon {
 
     private List<Direction> getOpenDirections(Creature c){
         List<Direction> open = new ArrayList<>(8);
-        for(Direction d: Direction.values()){
+        for(Direction d: Direction.vals){
             if(validMove(c, d)){
                 open.add(d);
             }
