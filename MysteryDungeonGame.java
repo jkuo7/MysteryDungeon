@@ -94,10 +94,10 @@ public class MysteryDungeonGame extends JKGame {
         bindKeyStrokeTo("w.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), moveAc(MysteryDungeon.Direction.UP));
         bindKeyStrokeTo("s.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), moveAc(MysteryDungeon.Direction.DOWN));
 
-         bindKeyStrokeTo("q.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_Q, 0), moveAc(MysteryDungeon.Direction.UP_LEFT));
-         bindKeyStrokeTo("e.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), moveAc(MysteryDungeon.Direction.UP_RIGHT));
-         bindKeyStrokeTo("z.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0), moveAc(MysteryDungeon.Direction.DOWN_LEFT));
-         bindKeyStrokeTo("x.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), moveAc(MysteryDungeon.Direction.DOWN_RIGHT));
+        bindKeyStrokeTo("q.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_Q, 0), moveAc(MysteryDungeon.Direction.UP_LEFT));
+        bindKeyStrokeTo("e.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), moveAc(MysteryDungeon.Direction.UP_RIGHT));
+        bindKeyStrokeTo("z.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0), moveAc(MysteryDungeon.Direction.DOWN_LEFT));
+        bindKeyStrokeTo("x.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), moveAc(MysteryDungeon.Direction.DOWN_RIGHT));
 
         bindKeyStrokeTo("space.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), moveAc(MysteryDungeon.Direction.STAY));
         bindKeyStrokeTo("i.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_I, 0), bagAc());
@@ -215,7 +215,7 @@ public class MysteryDungeonGame extends JKGame {
                     null, party, party[0]);
             if(pm != null){
                 pm.useFromBag(i, this);
-                repaintHUD();
+                repaintStats();
             }
         }
     }
@@ -377,10 +377,11 @@ public class MysteryDungeonGame extends JKGame {
     private void paintHUDInfo(Graphics2D g2d, FontMetrics fm){
         g2d.setColor(Color.WHITE);
 
+        String level = String.format("Lv. %-3d", player.level);
         String floor = String.format("FLOOR: %2d/%-2d", curFloor, maxFloor);
-        String money = String.format("$%d", player.money);
+        String money = String.format("$%-4d", player.money);
         String items = String.format("ITEMS: %2d/%-2d", player.bag.size(), player.bagLimit);
-        String info = floor + "     " + money + "     " + items;
+        String info = level + "     " + money + "     " + items + "     " + floor;
 
         if(statsWidth == 0){
             statsWidth = fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     ");

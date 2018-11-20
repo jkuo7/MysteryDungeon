@@ -646,8 +646,8 @@ public class MysteryDungeon {
             moveCreature(a, Direction.STAY);
         } else if(
                 (regions[a.x][a.y] == regions[player.x][player.y] ||
-                    (Math.abs(a.x - player.x) <= fieldOfView && Math.abs(a.y - player.y) <= fieldOfView)) &&
-                moveTowardsPlayer(a)){
+                        (Math.abs(a.x - player.x) <= fieldOfView && Math.abs(a.y - player.y) <= fieldOfView)) &&
+                        moveTowardsPlayer(a)){
         } else {
             moveCreature(a, open.get(ran.nextInt(open.size())));
         }
@@ -716,13 +716,13 @@ public class MysteryDungeon {
             }
             toPartyMember.add(vDist > 0 ? Direction.UP : Direction.DOWN);
         }
-         if(vDist != 0 && hDist != 0){
-             if(hDist > 0){
-                 toPartyMember.add(vDist > 0 ? Direction.UP_LEFT : Direction.DOWN_LEFT);
-             } else {
-                 toPartyMember.add(vDist > 0 ? Direction.UP_RIGHT : Direction.DOWN_RIGHT);
-             }
-         }
+        if(vDist != 0 && hDist != 0){
+            if(hDist > 0){
+                toPartyMember.add(vDist > 0 ? Direction.UP_LEFT : Direction.DOWN_LEFT);
+            } else {
+                toPartyMember.add(vDist > 0 ? Direction.UP_RIGHT : Direction.DOWN_RIGHT);
+            }
+        }
         return toPartyMember;
     }
 

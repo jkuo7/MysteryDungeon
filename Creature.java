@@ -31,4 +31,5 @@ public abstract class Creature extends Occupant{
         checkHealth(game);
     }
 
+    abstract int expGiven();
 }

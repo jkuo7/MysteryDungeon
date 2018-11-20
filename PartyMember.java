@@ -6,6 +6,8 @@ public abstract class PartyMember extends Creature{
     double curBelly = maxBelly;
     Player player;
     boolean critical = false;
+    int level = 1;
+    int exp = 0;
 
     PartyMember(int i, int j){
         super(i, j);
@@ -44,6 +46,9 @@ public abstract class PartyMember extends Creature{
         super.attacks(c, game);
         if(c.curHP <= 0){
             game.addMessage(String.format("%s fainted %s!", name, c.name));
+            for(PartyMember pm: player.party){
+                pm.getExp(c.expGiven(), game);
+            }
         } else {
             game.addMessage(String.format("%s attacked %s for %d damage", name, c.name, attack));
         }
@@ -54,6 +59,22 @@ public abstract class PartyMember extends Creature{
     void attackedFor(int a, MysteryDungeonGame game){
         game.addMessage(String.format("%s attacked for %d damage", name, a), Color.RED);
         super.attackedFor(a, game);
+    }
+
+    void getExp(int e, MysteryDungeonGame game){
+        exp += e;
+        while(exp >= level * 100){
+            levelUp(game);
+        }
+    }
+
+    void levelUp(MysteryDungeonGame game){
+        exp -= level * 100;
+        level++;
+        maxHP += 20;
+        attack += 2;
+        curHP = maxHP;
+        game.addMessage(String.format("%s leveled up to level %d! Max HP +%d, Attack +%d", name, level, 20, 2), Color.GREEN);
     }
 
     abstract void checkCritical(MysteryDungeonGame game);
@@ -73,6 +94,10 @@ public abstract class PartyMember extends Creature{
         checkCritical(game);
     }
 
+    int expGiven(){
+        return 0;
+    }
+
     public String toString(){
         String color;
         if(critical){
@@ -81,8 +106,8 @@ public abstract class PartyMember extends Creature{
             color = String.format("<html><font color=\"#%02x%02x%02x\">",
                     textColor.getRed(), textColor.getGreen(), textColor.getBlue());
         }
-        return String.format("%s%s (%s) (HP: %d/%d, Belly: %d/%d)</font></html>",
-                color, name, symbol, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly);
+        return String.format("%s%s (%s) (HP: %d/%d, Belly: %d/%d) </font></html>\n%sLv. %d, Exp to next level: %d </font></html>",
+                color, name, symbol, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly, color, level, level * 100 - exp);
     }
 
 }

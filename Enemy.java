@@ -33,4 +33,8 @@ public class Enemy extends Creature{
         }
     }
 
+    int expGiven(){
+        return (enemyNumber/10 + 1) * 25;
+    }
+
 }
