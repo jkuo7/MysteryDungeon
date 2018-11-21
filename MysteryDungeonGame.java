@@ -365,15 +365,12 @@ public class MysteryDungeonGame extends JKGame {
     private void paintHUD(Graphics2D g2d){
         g2d.setFont(new Font("Consolas", Font.PLAIN, 14));
         FontMetrics fm = g2d.getFontMetrics();
-        paintHUDInfo(g2d, fm);
-
         if(!critical){
             paintHUDStats(g2d, fm, Color.WHITE);
-            return;
-        }
-        if(criticalFlicker){
+        } else if(criticalFlicker){
             paintHUDStats(g2d, fm, Color.RED);
         }
+        paintHUDInfo(g2d, fm);
     }
 
     private void paintHUDInfo(Graphics2D g2d, FontMetrics fm){
@@ -383,14 +380,10 @@ public class MysteryDungeonGame extends JKGame {
         String floor = String.format("FLOOR: %2d/%-2d", curFloor, maxFloor);
         String money = String.format("$%-4d", player.money);
         String items = String.format("ITEMS: %2d/%-2d", player.bag.size(), player.bagLimit);
-        String info = level + "     " + money + "     " + items + "     " + floor;
-
-        if(statsWidth == 0){
-            statsWidth = fm.stringWidth("HP: XXX/XXX     BELLY: XXX/XXX     ");
-        }
+        String info = level + "     " + money + "     " + items + "     " + floor + "     ";
 
         if(infoWidth == 0){
-            infoWidth = fm.stringWidth(info + "     ");
+            infoWidth = fm.stringWidth(info);
         }
 
         g2d.drawString(info, TILE_SIZE + statsWidth, HUD_HEIGHT - fm.getHeight() + fm.getAscent());
@@ -401,7 +394,12 @@ public class MysteryDungeonGame extends JKGame {
         g2d.setColor(color);
         String hp = String.format("HP: %3d/%-3d", (int) Math.ceil(player.curHP), player.maxHP);
         String belly = String.format("BELLY: %3d/%-3d", (int) Math.ceil(player.curBelly), player.maxBelly);
-        String hud = hp + "     " + belly;
+        String hud = hp + "     " + belly + "     ";
+
+        if(statsWidth == 0){
+            statsWidth = fm.stringWidth(hud);
+        }
+
         g2d.drawString(hud, TILE_SIZE, HUD_HEIGHT - fm.getHeight() + fm.getAscent());
     }
 

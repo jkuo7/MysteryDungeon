@@ -5,26 +5,60 @@ public class Berry extends Item{
     int restoredHP;
     int increasedHP;
     int restoredHunger;
-    boolean isOran;
+    Kinds kind;
 
-    private static int[] restores = {100, 200};
-    private static int[] increases = {10, 5};
-    private static Color[] colors = {Color.BLUE, Color.YELLOW};
-    private static String[] names = {"Oran Berry", "Sitrus Berry"};
-    private static String[] descriptions = {"Eating it restores HP. Additionally, it increases your max HP. \nIf your max HP is 100 or more, your max HP won't increase unless you eat it when your HP is full.",
-            "Eating it restores HP. It also slightly increases \nyour max HP if you eat it when your HP is full. "};
+    enum Kinds{
+        ORAN (100, 10, Color.BLUE, "Oran Berry",
+                "Eating it restores HP. Additionally, it increases your max HP. \nIf your max HP is 100 or more, your max HP won't increase unless you eat it when your HP is full."),
+        SITRUS (200, 5, Color.YELLOW, "Sitrus Berry",
+                "Eating it restores HP. It also slightly increases \nyour max HP if you eat it when your HP is full.");
+
+        private final int restoredHP, increasedHP;
+        private final Color color;
+        private final String name, description;
+
+        Kinds(int r, int i, Color c, String n, String d){
+            restoredHP = r;
+            increasedHP = i;
+            color = c;
+            name = n;
+            description = d;
+        }
+
+        int getRestoredHP(){
+            return restoredHP;
+        }
+
+        int getIncreasedHP() {
+            return increasedHP;
+        }
+
+        Color getColor() {
+            return color;
+        }
+
+        String getName() {
+            return name;
+        }
+
+        String getDescription() {
+            return description;
+        }
+
+        private static final Kinds[] values = values();
+    }
 
     Berry(int i, int j, Random ran){
         super(i, j);
         symbol = "\uD83C\uDF53";
-        int index = (int) Math.min(Math.floor(-Math.log10(ran.nextDouble()/5)), restores.length - 1);
-        restoredHP = restores[index];
-        increasedHP = increases[index];
-        textColor = colors[index];
-        name = names[index];
-        description = descriptions[index];
+        int index = (int) Math.min(Math.floor(-Math.log10(ran.nextDouble()/5)), Kinds.values.length - 1);
+        kind = Kinds.values[index];
+        restoredHP = kind.getRestoredHP();
+        increasedHP = kind.getIncreasedHP();
+        textColor = kind.getColor();
+        name = kind.getName();
+        description = kind.getDescription();
         restoredHunger = 2;
-        isOran = index == 0;
     }
 
     void used(PartyMember p){
@@ -32,7 +66,7 @@ public class Berry extends Item{
         if(Math.ceil(p.curHP) == p.maxHP){
             p.maxHP += increasedHP;
         } else {
-            if(name.equals("Oran Berry") && p.maxHP < 100){
+            if(kind == Kinds.ORAN && p.maxHP < 100){
                 p.maxHP += increasedHP;
             }
             p.curHP = Math.min(p.maxHP, p.curHP + restoredHP);
