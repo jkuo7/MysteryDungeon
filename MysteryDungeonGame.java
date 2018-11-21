@@ -20,7 +20,7 @@ public class MysteryDungeonGame extends JKGame {
     private int countdown;
 
     private boolean critical = false;
-    private boolean criticalFlicker = true;
+    private boolean criticalFlicker = false;
 
     private int curFloor = 1;
     private int maxFloor = 2;
@@ -32,7 +32,7 @@ public class MysteryDungeonGame extends JKGame {
 
     private MysteryDungeon dungeon;
 
-    Player player;
+    private Player player;
     private static final int NUM_ALLIES = 3;
 
     private Queue<String> messages;
@@ -161,7 +161,7 @@ public class MysteryDungeonGame extends JKGame {
         return moves;
     }
 
-    void repaintGame(){
+    private void repaintGame(){
         repaintDungeon();
         repaintHUD();
         if(!critical){
@@ -205,7 +205,7 @@ public class MysteryDungeonGame extends JKGame {
         repaintGame();
     }
 
-    void showBag(){
+    private void showBag(){
         Object[] items = player.getBag();
 
         Item i = (Item) JOptionPane.showInputDialog(this,
@@ -227,7 +227,7 @@ public class MysteryDungeonGame extends JKGame {
         }
     }
 
-    void showParty(){
+    private void showParty(){
         Object[] party = player.getParty();
         JOptionPane.showMessageDialog(this, party, "Party", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -374,7 +374,6 @@ public class MysteryDungeonGame extends JKGame {
         if(criticalFlicker){
             paintHUDStats(g2d, fm, Color.RED);
         }
-        criticalFlicker = !criticalFlicker;
     }
 
     private void paintHUDInfo(Graphics2D g2d, FontMetrics fm){
@@ -434,25 +433,26 @@ public class MysteryDungeonGame extends JKGame {
 
     /** Helper function to repaint only the messages portion of the HUD */
     private void repaintMessages() {
+        criticalFlicker = !criticalFlicker;
+        if(messages.isEmpty() && nextMsg.equals("")){
+            return;
+        }
         if (criticalFlicker) {
-            if (!messages.isEmpty()) {
-                nextColor = msgColors.remove();
-                nextMsg = messages.remove();
-            }
+            nextColor = msgColors.remove();
+            nextMsg = messages.remove();
         } else {
             nextMsg = "";
         }
         repaint(statsWidth + infoWidth, 0, GAME_WIDTH - statsWidth - infoWidth, HUD_HEIGHT);
-        criticalFlicker = !criticalFlicker;
     }
 
-        /** Helper function to repaint only the dungeon */
+    /** Helper function to repaint only the dungeon */
     void repaintDungeon(){
         repaint(0, HUD_HEIGHT, GAME_WIDTH, GAME_HEIGHT - HUD_HEIGHT);
     }
 
     /** Helper function to repaint only the player (for rotations) */
-    void repaintPlayer(){
+    private void repaintPlayer(){
         repaint(player.x * TILE_SIZE, player.y * TILE_SIZE + HUD_HEIGHT, TILE_SIZE, TILE_SIZE);
     }
 

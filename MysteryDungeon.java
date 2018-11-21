@@ -588,17 +588,15 @@ public class MysteryDungeon {
 
 
     /** Moves the player in the given direction */
-    boolean playerTurn(Direction dir){
+    void playerTurn(Direction dir){
         if(dir != Direction.STAY &&
                 (regions[player.x + dir.dx()][player.y + dir.dy()] <= 0 ||
                         (creatureAt[player.x + dir.dx()][player.y + dir.dy()] != null &&
                                 creatureAt[player.x + dir.dx()][player.y + dir.dy()].isEnemy))) {
-            return false;
+            return;
         }
-        if(dir == Direction.STAY &&
-                creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()] != null &&
-                creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()].isEnemy){
-            player.attacks(creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()], game);
+        if(dir == Direction.STAY){
+            playerAttacks();
         } else {
             movePlayer(dir);
         }
@@ -618,7 +616,27 @@ public class MysteryDungeon {
             addNewEnemies();
             game.repaintDungeon();
         }
-        return true;
+    }
+
+    private void playerAttacks(){
+        Creature c = creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()];
+        if(c == null || !c.isEnemy){
+            if(player.curTarget != null && adjacentToTarget(player)){
+                turnToTarget(player);
+            } else {
+                List<Direction> adj = adjacentEnemies(player);
+                if(adj.size() == 0){
+                    movePlayer(Direction.STAY);
+                    return;
+                } else {
+                    player.facing = adj.get(ran.nextInt(adj.size()));
+                    player.curTarget = creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()];
+                }
+            }
+        } else {
+            player.curTarget = c;
+        }
+        player.attacks(player.curTarget, game);
     }
 
     private void movePlayer(Direction dir){
@@ -847,9 +865,9 @@ public class MysteryDungeon {
     void removeCreature (Creature c){
         creatureAt[c.x][c.y] = null;
         if(c.isEnemy) {
-            for(Ally a: player.allies){
-                if(a.curTarget == c){
-                    a.curTarget = null;
+            for(PartyMember pm: player.party){
+                if(pm.curTarget == c){
+                    pm.curTarget = null;
                 }
             }
             Enemy e = (Enemy) c;
