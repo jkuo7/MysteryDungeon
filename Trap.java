@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.util.Random;
 
 public class Trap extends FlatOccupant{
-    boolean revealed = true;
+    boolean revealed = false;
     boolean deactivated = false;
     Kinds kind;
     Random ran;
