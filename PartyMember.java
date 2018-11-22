@@ -98,6 +98,10 @@ public abstract class PartyMember extends Creature{
         return 0;
     }
 
+    void activatedTrap(Trap t, MysteryDungeonGame game, String effect){
+        game.addMessage(String.format("%s stepped on a %s: %s!", name, t.name, effect), Color.RED);
+    }
+
     public String toString(){
         String color;
         if(critical){

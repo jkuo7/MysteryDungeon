@@ -3,7 +3,6 @@ public abstract class Creature extends Occupant{
     boolean isPlayer = false;
     int maxHP, attack;
     double curHP;
-    String name;
     Creature curTarget;
 
     Creature(int i, int j){

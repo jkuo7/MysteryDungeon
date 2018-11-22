@@ -1,4 +1,5 @@
 public abstract class FlatOccupant extends Occupant{
+    boolean isTrap = false;
 
     FlatOccupant(int i, int j){
         super(i, j);

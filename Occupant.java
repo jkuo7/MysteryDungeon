@@ -5,6 +5,7 @@ public abstract class Occupant{
     int y;
     boolean canBeWalkedOn;
     String symbol;
+    String name;
     Color textColor;
     MysteryDungeon.Direction facing = MysteryDungeon.Direction.DOWN;
 
@@ -13,5 +14,8 @@ public abstract class Occupant{
         y = j;
     }
 
+    String symbol(){
+        return symbol;
+    }
 
 }

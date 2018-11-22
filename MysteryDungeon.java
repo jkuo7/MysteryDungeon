@@ -477,6 +477,7 @@ public class MysteryDungeon {
         addCoins();
         addApples();
         addBerries();
+        addTraps();
     }
 
     private void addCoins(){
@@ -519,6 +520,25 @@ public class MysteryDungeon {
             flatAt[x][y] = b;
             flatOccupants.add(b);
         }
+    }
+
+    private void addTraps(){
+        int numTraps = 5 + ran.nextInt(10);
+        int x, y;
+        for(int i = 0; i <= numTraps; i++){
+            do{
+                x = 1 + ran.nextInt(WIDTH - 2);
+                y = 1 + ran.nextInt(HEIGHT - 2);
+            } while(!isRoom(x, y) || flatAt[x][y] != null || creatureAt[x][y] != null || entranceToRoom(x, y));
+            Trap t = new Trap(x, y, ran);
+            flatAt[x][y] = t;
+            flatOccupants.add(t);
+        }
+    }
+
+    private boolean entranceToRoom(int x, int y){
+        return regions[x + 1][y] > numRooms || regions[x - 1][y] > numRooms ||
+                regions[x][y + 1] > numRooms || regions[x][y - 1] > numRooms;
     }
 
     private boolean isRoom(int x, int y){
