@@ -733,13 +733,20 @@ public class MysteryDungeon {
         List<Direction> toPartyMember = towardPartyMember(a, player);
         double rate = 1 - 0.125 * (toPartyMember.size() - 1);
         for(Direction dir : toPartyMember){
-            if(validMove(a, dir) && ran.nextDouble() < rate){
+            if(validMove(a, dir) && ran.nextDouble() < rate && !activeTrap(a, dir)){
                 moveCreature(a, dir);
                 return true;
             }
             rate += 0.125;
         }
         return false;
+    }
+
+    private boolean activeTrap(Ally a, Direction dir){
+        return flatAt[a.x + dir.dx()][a.y + dir.dy()] != null &&
+                flatAt[a.x + dir.dx()][a.y + dir.dy()].isTrap &&
+                ((Trap) flatAt[a.x + dir.dx()][a.y + dir.dy()]).revealed &&
+                !((Trap) flatAt[a.x + dir.dx()][a.y + dir.dy()]).deactivated;
     }
 
     private List<Direction> towardPartyMember(Creature c, PartyMember target){
@@ -821,7 +828,7 @@ public class MysteryDungeon {
     private List<Direction> getOpenDirections(Creature c){
         List<Direction> open = new ArrayList<>(8);
         for(Direction d: Direction.vals){
-            if(validMove(c, d)){
+            if(validMove(c, d) && (c.isEnemy || !activeTrap((Ally) c, d))){
                 open.add(d);
             }
         }
@@ -863,6 +870,18 @@ public class MysteryDungeon {
         if(flatAt[player.x][player.y] != null){
             flatAt[player.x][player.y].walkedOn(player, game, this);
         }
+    }
+
+    void warpPartyMember(PartyMember pm){
+        int x, y;
+        do{
+            x = 1 + ran.nextInt(WIDTH - 2);
+            y = 1 + ran.nextInt(HEIGHT - 2);
+        } while(regions[x][y] <= 0 || flatAt[x][y] != null || creatureAt[x][y] != null);
+        creatureAt[pm.x][pm.y] = null;
+        pm.x = x;
+        pm.y = y;
+        creatureAt[x][y] = pm;
     }
 
     private void markSeen(){
