@@ -919,6 +919,10 @@ public class MysteryDungeon {
         }
     }
 
+    FlatOccupant flatUnderPlayer(){
+        return flatAt[player.x][player.y];
+    }
+
     /** Returns next long from Random to be seed for next floor */
     long nextFloorSeed(){
         return ran.nextLong();

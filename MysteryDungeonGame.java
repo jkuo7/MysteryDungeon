@@ -110,8 +110,9 @@ public class MysteryDungeonGame extends JKGame {
         bindKeyStrokeTo("x.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), moveAc(MysteryDungeon.Direction.DOWN_RIGHT));
 
         bindKeyStrokeTo("space.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), moveAc(MysteryDungeon.Direction.STAY));
-        bindKeyStrokeTo("i.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_I, 0), bagAc());
-        bindKeyStrokeTo("k.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_K, 0), partyAc());
+        bindKeyStrokeTo("o.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_O, 0), bagAc());
+        bindKeyStrokeTo("p.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), partyAc());
+        bindKeyStrokeTo("i.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_I, 0), inspectAc());
     }
 
     private Action moveAc(MysteryDungeon.Direction dir){
@@ -147,6 +148,17 @@ public class MysteryDungeonGame extends JKGame {
             public void actionPerformed(ActionEvent ae){
                 if(!betweenFloors){
                     showParty();
+                }
+            }
+        };
+    }
+
+    private Action inspectAc(){
+        return new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent ae){
+                if(!betweenFloors){
+                    inspectFloor();
                 }
             }
         };
@@ -232,6 +244,13 @@ public class MysteryDungeonGame extends JKGame {
         JOptionPane.showMessageDialog(this, party, "Party", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    private void inspectFloor(){
+        FlatOccupant item = dungeon.flatUnderPlayer();
+        if(item != null){
+            JOptionPane.showMessageDialog(this, item, item.name, JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
     void askNextFloor(){
         Object selectedValue = JOptionPane.showConfirmDialog(this,
                 "Go to the next floor?", "Stairs Reached", JOptionPane.YES_NO_OPTION);
@@ -288,8 +307,9 @@ public class MysteryDungeonGame extends JKGame {
             g2d.drawString("WASD to move", (GAME_WIDTH - fm.stringWidth("WASD to move"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 150);
             g2d.drawString("Q/E/Z/X to move NW/NE/SW/SE", (GAME_WIDTH - fm.stringWidth("Q/E/Z/X to move NW/NE/SW/SE"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 100);
             g2d.drawString("SPACE to attack/idle", (GAME_WIDTH - fm.stringWidth("SPACE to attack/idle"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 50);
-            g2d.drawString("I to view inventory", (GAME_WIDTH - fm.stringWidth("I to view inventory"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent());
-            g2d.drawString("K to view party", (GAME_WIDTH - fm.stringWidth("K to view party"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 50);
+            g2d.drawString("O to open bag", (GAME_WIDTH - fm.stringWidth("O to open bag"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent());
+            g2d.drawString("P to view party", (GAME_WIDTH - fm.stringWidth("P to view party"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 50);
+            g2d.drawString("I to inspect floor", (GAME_WIDTH - fm.stringWidth("I to inspect floor"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 100);
             g2d.drawString("-Press Enter to Start-", (GAME_WIDTH - fm.stringWidth("-Press Enter to Start-"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 150);
         }
         flicker = !flicker;

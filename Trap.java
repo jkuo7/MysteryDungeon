@@ -15,7 +15,7 @@ public class Trap extends FlatOccupant{
         WARP ("Warp Trap", 1, "Warped to elsewhere on the floor",
                 "Stepping on it warps you to somewhere else on the floor.");
 
-        private final String name, description, effect;
+        private final String name, effect, description;
 
         private final double breakChance;
 
@@ -53,6 +53,7 @@ public class Trap extends FlatOccupant{
         int index = ran.nextInt(Kinds.values.length);
         kind = Kinds.values[index];
         name = kind.getName();
+        description = kind.getDescription();
         isTrap = true;
     }
 

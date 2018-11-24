@@ -1,6 +1,5 @@
 public abstract class Item extends Holdable{
 
-    String description;
 
     Item(int i, int j){
         super(i, j);
@@ -16,7 +15,4 @@ public abstract class Item extends Holdable{
          p.take(this, game, dungeon);
      }
 
-    public String toString(){
-        return name + ": " + description;
-    }
 }

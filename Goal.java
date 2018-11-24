@@ -9,6 +9,7 @@ public class Goal extends FlatOccupant{
         symbol = "▣";
         textColor = purple;
         name = "Goal";
+        description = "It's the stairs! \nYou can go to the next floor.";
     }
 
     void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){}
