@@ -746,7 +746,7 @@ public class MysteryDungeon {
         return flatAt[a.x + dir.dx()][a.y + dir.dy()] != null &&
                 flatAt[a.x + dir.dx()][a.y + dir.dy()].isTrap &&
                 ((Trap) flatAt[a.x + dir.dx()][a.y + dir.dy()]).revealed &&
-                !((Trap) flatAt[a.x + dir.dx()][a.y + dir.dy()]).deactivated;
+                !((Trap) flatAt[a.x + dir.dx()][a.y + dir.dy()]).broken;
     }
 
     private List<Direction> towardPartyMember(Creature c, PartyMember target){

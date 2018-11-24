@@ -3,7 +3,7 @@ import java.util.Random;
 
 public class Trap extends FlatOccupant{
     boolean revealed = false;
-    boolean deactivated = false;
+    boolean broken = false;
     Kinds kind;
     static Random ran;
 
@@ -16,6 +16,7 @@ public class Trap extends FlatOccupant{
                 "Stepping on it warps you to somewhere else on the floor.");
 
         private final String name, description, effect;
+
         private final double breakChance;
 
         Kinds(String n, double b, String e, String d){
@@ -37,6 +38,10 @@ public class Trap extends FlatOccupant{
             return effect;
         }
 
+        double getBreakChance() {
+            return breakChance;
+        }
+
         private static final Kinds[] values = values();
     }
 
@@ -44,7 +49,7 @@ public class Trap extends FlatOccupant{
         super(i, j);
         symbol = "✖";
         textColor = Color.RED;
-        ran = r;
+        if(ran == null) {ran = r;}
         int index = ran.nextInt(Kinds.values.length);
         kind = Kinds.values[index];
         name = kind.getName();
@@ -56,7 +61,7 @@ public class Trap extends FlatOccupant{
     }
 
     void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){
-        if(!deactivated){
+        if(!broken){
             activatedTrap(a, game, dungeon);
         }
     }
@@ -64,7 +69,7 @@ public class Trap extends FlatOccupant{
     void walkedOn(Enemy e, MysteryDungeonGame game, MysteryDungeon dungeon){}
 
     void walkedOn(Player p, MysteryDungeonGame game, MysteryDungeon dungeon){
-        if(!deactivated){
+        if(!broken){
             activatedTrap(p, game, dungeon);
         }
     }
@@ -77,8 +82,8 @@ public class Trap extends FlatOccupant{
             case WARP: dungeon.warpPartyMember(pm); break;
         }
         pm.activatedTrap(this, game, kind.getEffect());
-        if(ran.nextDouble() < kind.breakChance){
-            deactivated = true;
+        if(ran.nextDouble() < kind.getBreakChance()){
+            broken = true;
             textColor = Color.GREEN;
         }
     }
