@@ -9,11 +9,11 @@ public class Trap extends FlatOccupant{
 
     enum Kinds{
         HUNGER ("Hunger Trap", 0.3, "Belly decreased by 10",
-                "Stepping on it makes you hungry!"),
+                "Stepping on it makes you hungry"),
         SPIKY ("Spiky Trap", 1, "Took 25 damage",
-                "Stepping on this trap damages with its spikes."),
+                "Stepping on this trap damages you with its spikes"),
         WARP ("Warp Trap", 1, "Warped to elsewhere on the floor",
-                "Stepping on it warps you to somewhere else on the floor.");
+                "Stepping on it warps you to somewhere else on the floor");
 
         private final String name, effect, description;
 
