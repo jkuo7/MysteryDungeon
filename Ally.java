@@ -1,19 +1,21 @@
 import java.awt.Color;
 
 public class Ally extends PartyMember{
-    static Color darkGreen = new Color(0,127,0);
+//    static Color darkGreen = new Color(0,127,0);
     int allyNumber;
     static int allyTotal = 1;
     boolean swapped;
+    static Type[] types = {Type.ELECTRIC, Type.WATER, Type.GRASS};
 
     Ally(int i, int j, Player p){
         super(i, j);
         symbol = "⍥";
-        textColor = darkGreen;
         player = p;
         player.party.add(this);
         player.allies.add(this);
         allyNumber = allyTotal;
+        type = types[allyNumber % types.length];
+        textColor = type.getColor();
         allyTotal++;
         name = "Ally " + allyNumber;
     }

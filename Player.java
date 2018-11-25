@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Player extends PartyMember{
     int money = 0;
-    static Color pink = new Color(255,65,140);
+//    static Color pink = new Color(255,65,140);
     Set<Item> bag;
     Set<PartyMember> party;
     Set<Ally> allies;
@@ -14,7 +14,8 @@ public class Player extends PartyMember{
         super(i, j);
         isPlayer = true;
         symbol = "⍥";
-        textColor = pink;
+        type = Type.FIRE;
+        textColor = type.getColor();
         bag = new LinkedHashSet<>();
         party = new LinkedHashSet<>();
         allies = new LinkedHashSet<>();

@@ -14,7 +14,8 @@ public class Enemy extends Creature{
         attack = 5;
 
         symbol = "♉";
-        textColor = Color.BLUE;
+        type = Type.NORMAL;
+        textColor = type.getColor();
         enemyNumber = enemyTotal;
         enemyTotal++;
         name = "Enemy " + enemyNumber;

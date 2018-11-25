@@ -4,6 +4,7 @@ public abstract class Creature extends Occupant{
     int maxHP, attack;
     double curHP;
     Creature curTarget;
+    Type type;
 
     Creature(int i, int j){
         super(i, j);
