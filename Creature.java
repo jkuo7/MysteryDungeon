@@ -1,5 +1,5 @@
-//import java.util.LinkedHashSet;
-//import java.util.Set;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class Creature extends Occupant{
     boolean isEnemy;
@@ -8,8 +8,7 @@ public abstract class Creature extends Occupant{
     double curHP;
     Creature curTarget;
     Type type;
-    Attack[] attacks = new Attack[4];
-//    Set<Attack> attacks = new LinkedHashSet<>(4);
+    Set<Attack> attacks = new LinkedHashSet<>(4);
 
     Creature(int i, int j){
         super(i, j);
