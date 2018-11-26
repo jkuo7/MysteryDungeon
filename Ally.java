@@ -5,7 +5,7 @@ public class Ally extends PartyMember{
     int allyNumber;
     static int allyTotal = 1;
     boolean swapped;
-    static Type[] types = {Type.ELECTRIC, Type.WATER, Type.GRASS};
+    static Type[] allyTypes = {Type.ELECTRIC, Type.WATER, Type.GRASS};
 
     Ally(int i, int j, Player p){
         super(i, j);
@@ -14,7 +14,7 @@ public class Ally extends PartyMember{
         player.party.add(this);
         player.allies.add(this);
         allyNumber = allyTotal;
-        type = types[allyNumber % types.length];
+        type = allyTypes[allyNumber % allyTypes.length];
         textColor = type.getColor();
         allyTotal++;
         name = "Ally " + allyNumber;
