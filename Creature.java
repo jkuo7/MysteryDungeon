@@ -1,3 +1,6 @@
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public abstract class Creature extends Occupant{
     boolean isEnemy;
     boolean isPlayer = false;
@@ -5,6 +8,7 @@ public abstract class Creature extends Occupant{
     double curHP;
     Creature curTarget;
     Type type;
+    Set<Attack> attacks = new LinkedHashSet<>(4);
 
     Creature(int i, int j){
         super(i, j);

@@ -22,6 +22,9 @@ public class Player extends PartyMember{
         name = "Player";
         player = this;
         party.add(this);
+        attacks.add(Attack.TACKLE);
+        attacks.add(Attack.EMBER);
+        setAttacksString();
     }
 
     void checkCritical(MysteryDungeonGame game){

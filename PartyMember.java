@@ -8,6 +8,7 @@ public abstract class PartyMember extends Creature{
     boolean critical = false;
     int level = 1;
     int exp = 0;
+    private String attacksString = "";
 
     PartyMember(int i, int j){
         super(i, j);
@@ -110,8 +111,18 @@ public abstract class PartyMember extends Creature{
             color = String.format("<html><font color=\"#%02x%02x%02x\">",
                     textColor.getRed(), textColor.getGreen(), textColor.getBlue());
         }
-        return String.format("%s%s (%s) (HP: %d/%d, Belly: %d/%d) </font></html>\n%s%s Type, Lv. %d, Exp to next level: %d </font></html>",
-                color, name, symbol, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly, color, type, level, level * 100 - exp);
+        return String.format("%s%s (%s) (HP: %d/%d, Belly: %d/%d) </font></html>\n%s%s Type, Lv. %d, Exp to next level: %d </font></html>\n%s",
+                color, name, symbol, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly, color, type, level, level * 100 - exp, attacksString);
+    }
+
+    void setAttacksString(){
+        String s= "<html>";
+        for(Attack a: attacks){
+            s += a + ", ";
+        }
+        s = s.substring(0, s.length() - 2);
+        s += "</html>";
+        attacksString = s;
     }
 
 }
