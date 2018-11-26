@@ -25,6 +25,11 @@ public enum Attack {
     }
 
     public String toString(){
+        return String.format("<html>%s</html>",
+                inHTML());
+    }
+
+    String inHTML(){
         return String.format("<span color=\"#%02x%02x%02x\">%s</span>",
                 type.getColor().getRed(), type.getColor().getGreen(), type.getColor().getBlue(), name);
     }

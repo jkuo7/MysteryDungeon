@@ -118,7 +118,9 @@ public abstract class PartyMember extends Creature{
     void setAttacksString(){
         String s= "<html>";
         for(Attack a: attacks){
-            s += a + ", ";
+            if(a != null) {
+                s += a.inHTML() + ", ";
+            }
         }
         s = s.substring(0, s.length() - 2);
         s += "</html>";

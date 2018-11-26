@@ -19,8 +19,10 @@ public class Ally extends PartyMember{
         textColor = type.getColor();
         allyTotal++;
         name = "Ally " + allyNumber;
-        attacks.add(Attack.TACKLE);
-        attacks.add(startAttack[allyNumber % startAttack.length]);
+        attacks[0] = Attack.TACKLE;
+        attacks[1] = startAttack[allyNumber % startAttack.length];
+//        attacks.add(Attack.TACKLE);
+//        attacks.add(startAttack[allyNumber % startAttack.length]);
         setAttacksString();
     }
 

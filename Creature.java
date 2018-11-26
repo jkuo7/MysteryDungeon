@@ -1,5 +1,5 @@
-import java.util.LinkedHashSet;
-import java.util.Set;
+//import java.util.LinkedHashSet;
+//import java.util.Set;
 
 public abstract class Creature extends Occupant{
     boolean isEnemy;
@@ -8,7 +8,8 @@ public abstract class Creature extends Occupant{
     double curHP;
     Creature curTarget;
     Type type;
-    Set<Attack> attacks = new LinkedHashSet<>(4);
+    Attack[] attacks = new Attack[4];
+//    Set<Attack> attacks = new LinkedHashSet<>(4);
 
     Creature(int i, int j){
         super(i, j);
@@ -27,7 +28,7 @@ public abstract class Creature extends Occupant{
     abstract void checkHealth(MysteryDungeonGame game);
 
     void attacks(Creature c, MysteryDungeonGame game){
-        c.attackedFor(attack, game);
+        c.attackedFor(5, game);
     }
 
     void attackedFor(int a, MysteryDungeonGame game){
