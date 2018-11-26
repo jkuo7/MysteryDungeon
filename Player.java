@@ -66,4 +66,8 @@ public class Player extends PartyMember{
     Object[] getParty(){
         return party.toArray();
     }
+
+    Object[] getAttacks(){
+        return attacks.toArray();
+    }
 }

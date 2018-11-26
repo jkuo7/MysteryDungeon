@@ -113,6 +113,7 @@ public class MysteryDungeonGame extends JKGame {
         bindKeyStrokeTo("o.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_O, 0), bagAc());
         bindKeyStrokeTo("p.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), partyAc());
         bindKeyStrokeTo("i.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_I, 0), inspectAc());
+        bindKeyStrokeTo("k.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_K, 0), attackAc());
     }
 
     private Action moveAc(MysteryDungeon.Direction dir){
@@ -159,6 +160,17 @@ public class MysteryDungeonGame extends JKGame {
             public void actionPerformed(ActionEvent ae){
                 if(!betweenFloors){
                     inspectFloor();
+                }
+            }
+        };
+    }
+
+    private Action attackAc(){
+        return new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent ae){
+                if(!betweenFloors){
+                    showAttacks();
                 }
             }
         };
@@ -248,6 +260,19 @@ public class MysteryDungeonGame extends JKGame {
         FlatOccupant item = dungeon.flatUnderPlayer();
         if(item != null){
             JOptionPane.showMessageDialog(this, item, item.name, JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void showAttacks(){
+        Object[] attacks = player.getAttacks();
+
+        Attack a = (Attack) JOptionPane.showInputDialog(this,
+                "Choose an attack to use",
+                "Attacks",
+                JOptionPane.PLAIN_MESSAGE,
+                null, attacks, "Choose an item to use");
+        if(a!= null){
+
         }
     }
 
