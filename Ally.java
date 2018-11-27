@@ -5,7 +5,7 @@ public class Ally extends PartyMember{
     static int allyTotal = 1;
     boolean swapped;
     static Type[] allyTypes = {Type.ELECTRIC, Type.WATER, Type.GRASS};
-    static Attack[] startAttack = {Attack.THUNDER_SHOCK, Attack.BUBBLE, Attack.VINE_WHIP};
+    static Attack[] startAttack = {VariableAttack.THUNDER_SHOCK, VariableAttack.BUBBLE, VariableAttack.VINE_WHIP};
 
     Ally(int i, int j, Player p){
         super(i, j);
@@ -18,7 +18,7 @@ public class Ally extends PartyMember{
         textColor = type.getColor();
         allyTotal++;
         name = "Ally " + allyNumber;
-        attacks.add(Attack.TACKLE);
+        attacks.add(VariableAttack.TACKLE);
         attacks.add(startAttack[allyNumber % startAttack.length]);
         setAttacksString();
     }

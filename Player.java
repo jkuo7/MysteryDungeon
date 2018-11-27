@@ -22,8 +22,8 @@ public class Player extends PartyMember{
         name = "Player";
         player = this;
         party.add(this);
-        attacks.add(Attack.TACKLE);
-        attacks.add(Attack.EMBER);
+        attacks.add(VariableAttack.TACKLE);
+        attacks.add(VariableAttack.EMBER);
         setAttacksString();
     }
 

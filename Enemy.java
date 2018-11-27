@@ -17,7 +17,7 @@ public class Enemy extends Creature{
         enemyNumber = enemyTotal;
         enemyTotal++;
         name = "Enemy " + enemyNumber;
-        attacks.add(Attack.TACKLE);
+        attacks.add(VariableAttack.TACKLE);
     }
 
     void take(Holdable h, MysteryDungeon dungeon){
