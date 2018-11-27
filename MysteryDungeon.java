@@ -608,18 +608,17 @@ public class MysteryDungeon {
 
 
     /** Moves the player in the given direction */
-    void playerTurn(Direction dir){
-        if(dir != Direction.STAY &&
-                (regions[player.x + dir.dx()][player.y + dir.dy()] <= 0 ||
-                        (creatureAt[player.x + dir.dx()][player.y + dir.dy()] != null &&
-                                creatureAt[player.x + dir.dx()][player.y + dir.dy()].isEnemy))) {
+    void playerMoves(Direction dir){
+        if(regions[player.x + dir.dx()][player.y + dir.dy()] <= 0 ||
+                (creatureAt[player.x + dir.dx()][player.y + dir.dy()] != null &&
+                        creatureAt[player.x + dir.dx()][player.y + dir.dy()].isEnemy)) {
             return;
         }
-        if(dir == Direction.STAY){
-            playerAttacks();
-        } else {
-            movePlayer(dir);
-        }
+        movePlayer(dir);
+        restOfTurn();
+    }
+
+    private void restOfTurn(){
         for(Ally a: player.allies){
             if(a.swapped){
                 a.swapped = false;
@@ -638,7 +637,21 @@ public class MysteryDungeon {
         }
     }
 
-    private void playerAttacks(){
+    void playerNormalAttacks(){
+        if(findPlayerTarget()){
+            player.attacks(player.curTarget, game);
+        }
+        restOfTurn();
+    }
+
+    void playerSpecialAttacks(Attack a){
+        if(findPlayerTarget()){
+            player.specialAttacks(a, player.curTarget, game);
+        }
+        restOfTurn();
+    }
+
+    private boolean findPlayerTarget(){
         Creature c = creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()];
         if(c == null || !c.isEnemy){
             if(player.curTarget != null && adjacentToTarget(player)){
@@ -646,8 +659,9 @@ public class MysteryDungeon {
             } else {
                 List<Direction> adj = adjacentEnemies(player);
                 if(adj.size() == 0){
+                    player.curTarget = null;
                     movePlayer(Direction.STAY);
-                    return;
+                    return false;
                 } else {
                     player.facing = adj.get(ran.nextInt(adj.size()));
                     player.curTarget = creatureAt[player.x + player.facing.dx()][player.y + player.facing.dy()];
@@ -656,7 +670,7 @@ public class MysteryDungeon {
         } else {
             player.curTarget = c;
         }
-        player.attacks(player.curTarget, game);
+        return true;
     }
 
     private void movePlayer(Direction dir){

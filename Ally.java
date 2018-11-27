@@ -1,7 +1,6 @@
 import java.awt.Color;
 
 public class Ally extends PartyMember{
-//    static Color darkGreen = new Color(0,127,0);
     int allyNumber;
     static int allyTotal = 1;
     boolean swapped;

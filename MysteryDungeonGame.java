@@ -109,7 +109,7 @@ public class MysteryDungeonGame extends JKGame {
         bindKeyStrokeTo("z.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0), moveAc(MysteryDungeon.Direction.DOWN_LEFT));
         bindKeyStrokeTo("x.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), moveAc(MysteryDungeon.Direction.DOWN_RIGHT));
 
-        bindKeyStrokeTo("space.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), moveAc(MysteryDungeon.Direction.STAY));
+        bindKeyStrokeTo("space.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), normalAttackAc());
         bindKeyStrokeTo("o.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_O, 0), bagAc());
         bindKeyStrokeTo("p.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), partyAc());
         bindKeyStrokeTo("i.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_I, 0), inspectAc());
@@ -121,12 +121,23 @@ public class MysteryDungeonGame extends JKGame {
             @Override
             public void actionPerformed(ActionEvent ae){
                 if(!betweenFloors){
-                    if(player.facing == dir || dir == MysteryDungeon.Direction.STAY) {
-                        dungeon.playerTurn(dir);
+                    if(player.facing == dir) {
+                        dungeon.playerMoves(dir);
                     } else {
                         player.facing = dir;
                         repaintPlayer();
                     }
+                }
+            }
+        };
+    }
+
+    private Action normalAttackAc(){
+        return new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent ae){
+                if(!betweenFloors){
+                    dungeon.playerNormalAttacks();
                 }
             }
         };
@@ -270,9 +281,10 @@ public class MysteryDungeonGame extends JKGame {
                 "Choose an attack to use",
                 "Attacks",
                 JOptionPane.PLAIN_MESSAGE,
-                null, attacks, "Choose an item to use");
+                null, attacks, player.lastAttack);
         if(a!= null){
-
+            player.lastAttack = a;
+            dungeon.playerSpecialAttacks(a);
         }
     }
 

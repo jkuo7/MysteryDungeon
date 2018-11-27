@@ -24,6 +24,11 @@ public enum Attack {
         return power;
     }
 
+    int calculateDamage(int atk, Type atkType, int def, Type defType){
+        int base = (atk * power) / def;
+        return (int)(base * type.multiplierAgainst(defType) * type.stab(atkType));
+    }
+
     public String toString(){
         return String.format("<html>%s</html>",
                 inHTML());
@@ -32,6 +37,10 @@ public enum Attack {
     String inHTML(){
         return String.format("<span color=\"#%02x%02x%02x\">%s</span>",
                 type.getColor().getRed(), type.getColor().getGreen(), type.getColor().getBlue(), name);
+    }
+
+    String getName(){
+        return name;
     }
 
 }

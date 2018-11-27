@@ -3,11 +3,11 @@ import java.util.*;
 
 public class Player extends PartyMember{
     int money = 0;
-//    static Color pink = new Color(255,65,140);
     Set<Item> bag;
     Set<PartyMember> party;
     Set<Ally> allies;
     int bagLimit = 20;
+    Attack lastAttack;
 
 
     Player(int i, int j){
