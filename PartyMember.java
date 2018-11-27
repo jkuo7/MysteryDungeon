@@ -43,36 +43,15 @@ public abstract class PartyMember extends Creature{
         }
     }
 
-    void attacks(Creature c, MysteryDungeonGame game){
-        super.attacks(c, game);
-        game.addMessage(String.format("%s attacked %s for %d damage", name, c.name, 5));
-        if(c.curHP <= 0){
-            game.addMessage(String.format("%s fainted %s!", name, c.name));
-            for(PartyMember pm: player.party){
-                pm.getExp(c.expGiven(), game);
-            }
-        }
-        checkHunger();
-        checkHealth(game);
-    }
-
     void specialAttacks(Attack a, Creature c, MysteryDungeonGame game){
         super.specialAttacks(a, c, game);
-        game.addMessage(String.format("%s used %s on %s", name, a.getName(), c.name));
-        a.getType().effectiveAgainst(c.type, game);
         if(c.curHP <= 0){
-            game.addMessage(String.format("%s fainted %s!", name, c.name));
             for(PartyMember pm: player.party){
                 pm.getExp(c.expGiven(), game);
             }
         }
         checkHunger();
         checkHealth(game);
-    }
-
-    void attackedFor(int a, MysteryDungeonGame game){
-        game.addMessage(String.format("%s attacked for %d damage", name, a), Color.RED);
-        super.attackedFor(a, game);
     }
 
     private void getExp(int e, MysteryDungeonGame game){

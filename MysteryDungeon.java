@@ -637,13 +637,6 @@ public class MysteryDungeon {
         }
     }
 
-    void playerNormalAttacks(){
-        if(findPlayerTarget()){
-            player.attacks(player.curTarget, game);
-        }
-        restOfTurn();
-    }
-
     void playerSpecialAttacks(Attack a){
         if(findPlayerTarget()){
             player.specialAttacks(a, player.curTarget, game);
@@ -685,14 +678,14 @@ public class MysteryDungeon {
     private void moveAlly(Ally a){
         if(a.curTarget != null && adjacentToTarget(a)){
             turnToTarget(a);
-            a.attacks(a.curTarget, game);
+            a.specialAttacks(FixedAttack.NORMAL_ATTACK, a.curTarget, game);
             return;
         }
         List<Direction> adj = adjacentEnemies(a);
         if(adj.size() != 0){
             a.facing = adj.get(ran.nextInt(adj.size()));
             a.curTarget = creatureAt[a.x + a.facing.dx()][a.y + a.facing.dy()];
-            a.attacks(a.curTarget, game);
+            a.specialAttacks(FixedAttack.NORMAL_ATTACK, a.curTarget, game);
             return;
         }
         List<Direction> open = getOpenDirections(a);
@@ -795,14 +788,14 @@ public class MysteryDungeon {
     private void moveEnemy(Enemy e){
         if(e.curTarget != null && adjacentToTarget(e) && ran.nextDouble() < 0.8){
             turnToTarget(e);
-            e.attacks(e.curTarget, game);
+            e.specialAttacks(FixedAttack.NORMAL_ATTACK, e.curTarget, game);
             return;
         }
         List<Direction> adj = adjacentEnemies(e);
         if(adj.size() != 0 && ran.nextDouble() < 0.8){
             e.facing = adj.get(ran.nextInt(adj.size()));
             e.curTarget = creatureAt[e.x + e.facing.dx()][e.y + e.facing.dy()];
-            e.attacks(e.curTarget, game);
+            e.specialAttacks(FixedAttack.NORMAL_ATTACK, e.curTarget, game);
             return;
         }
         List<Direction> open = getOpenDirections(e);

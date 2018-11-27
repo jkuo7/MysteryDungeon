@@ -137,7 +137,7 @@ public class MysteryDungeonGame extends JKGame {
             @Override
             public void actionPerformed(ActionEvent ae){
                 if(!betweenFloors){
-                    dungeon.playerNormalAttacks();
+                    dungeon.playerSpecialAttacks(FixedAttack.NORMAL_ATTACK);
                 }
             }
         };

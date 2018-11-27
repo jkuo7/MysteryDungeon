@@ -28,12 +28,11 @@ public abstract class Creature extends Occupant{
 
     abstract void checkHealth(MysteryDungeonGame game);
 
-    void attacks(Creature c, MysteryDungeonGame game){
-        c.attackedFor(5, game);
-    }
-
     void specialAttacks(Attack a, Creature c, MysteryDungeonGame game){
-        c.attackedFor(a.calculateDamage(attack, type, c.def, c.type), game);
+        a.usedOn(this, c, game);
+        if(c.curHP <= 0) {
+            game.addMessage(String.format("%s fainted!", c.name));
+        }
     }
 
     void attackedFor(int a, MysteryDungeonGame game){

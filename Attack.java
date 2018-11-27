@@ -1,6 +1,5 @@
-interface Attack {
-    Type getType();
-    int calculateDamage(int atk, Type atkType, int def, Type defType);
+public interface Attack {
+    void usedOn(Creature attacker, Creature defender, MysteryDungeonGame game);
     String inHTML();
     String getName();
 }
