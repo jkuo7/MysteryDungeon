@@ -43,8 +43,8 @@ public abstract class PartyMember extends Creature{
         }
     }
 
-    void specialAttacks(Attack a, Creature c, MysteryDungeonGame game){
-        super.specialAttacks(a, c, game);
+    void attacks(Attack a, Creature c, MysteryDungeonGame game){
+        super.attacks(a, c, game);
         if(c.curHP <= 0){
             for(PartyMember pm: player.party){
                 pm.getExp(c.expGiven(), game);

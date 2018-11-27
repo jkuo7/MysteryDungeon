@@ -28,7 +28,7 @@ public abstract class Creature extends Occupant{
 
     abstract void checkHealth(MysteryDungeonGame game);
 
-    void specialAttacks(Attack a, Creature c, MysteryDungeonGame game){
+    void attacks(Attack a, Creature c, MysteryDungeonGame game){
         a.usedOn(this, c, game);
         if(c.curHP <= 0) {
             game.addMessage(String.format("%s fainted!", c.name));

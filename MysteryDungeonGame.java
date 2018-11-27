@@ -137,7 +137,7 @@ public class MysteryDungeonGame extends JKGame {
             @Override
             public void actionPerformed(ActionEvent ae){
                 if(!betweenFloors){
-                    dungeon.playerSpecialAttacks(FixedAttack.NORMAL_ATTACK);
+                    dungeon.playerAttacks(FixedAttack.NORMAL_ATTACK);
                 }
             }
         };
@@ -284,7 +284,7 @@ public class MysteryDungeonGame extends JKGame {
                 null, attacks, player.lastAttack);
         if(a!= null){
             player.lastAttack = a;
-            dungeon.playerSpecialAttacks(a);
+            dungeon.playerAttacks(a);
         }
     }
 
