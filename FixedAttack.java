@@ -18,6 +18,10 @@ public enum FixedAttack implements Attack{
         defender.attackedFor(power, game);
     }
 
+    public int damage(Creature attacker, Creature defender, MysteryDungeonGame game){
+        return power;
+    }
+
     public String toString(){
         return String.format("<html>%s</html>",
                 inHTML());

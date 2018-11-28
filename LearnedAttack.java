@@ -14,6 +14,10 @@ public class LearnedAttack implements Attack{
         usePP();
     }
 
+    public int damage(Creature attacker, Creature defender, MysteryDungeonGame game){
+        return attack.damage(attacker, defender, game);
+    }
+
     public String toString(){
         return String.format("<html>%s</html>",
                 inHTML());

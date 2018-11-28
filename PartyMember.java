@@ -60,8 +60,9 @@ public abstract class PartyMember extends Creature{
         level++;
         maxHP += 20;
         attack += 2;
+        def += 2;
         curHP = maxHP;
-        game.addMessage(String.format("%s leveled up to level %d! Max HP +%d, Attack +%d", name, level, 20, 2), Color.GREEN);
+        game.addMessage(String.format("%s leveled up to level %d! Max HP +%d, Attack +%d, Defense +%d", name, level, 20, 2, 2), Color.GREEN);
     }
 
     abstract void checkCritical(MysteryDungeonGame game);

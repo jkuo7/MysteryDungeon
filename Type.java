@@ -27,15 +27,21 @@ public enum Type {
         return color;
     }
 
-    double multiplierFrom(Type attackType, MysteryDungeonGame game){
+    double multiplierFrom(Type attackType, MysteryDungeonGame game, boolean print){
         if(immuneTo.contains(attackType.name())){
-            game.addMessage("There was little effect...");
+            if(print){
+                game.addMessage("There was little effect...");
+            }
             return 0.5;
         } else if(weakTo.contains(attackType.name())){
-            game.addMessage("It's super effective!");
+            if(print){
+                game.addMessage("It's super effective!");
+            }
             return 1.4;
         } else if(resists.contains(attackType.name())){
-            game.addMessage("It's not very effective");
+            if(print){
+                game.addMessage("It's not very effective");
+            }
             return 0.7;
         }
         return 1;
@@ -47,16 +53,6 @@ public enum Type {
         }
         return 1;
     }
-
-//    void weakAgainst(Type attackType, MysteryDungeonGame game){
-//        if(immuneTo.contains(attackType.name())){
-//            game.addMessage("There was little effect...");
-//        } else if(weakTo.contains(attackType.name())){
-//            game.addMessage("It's super effective!");
-//        } else if(resists.contains(attackType.name())){
-//            game.addMessage("It's not very effective");
-//        }
-//    }
 
     boolean isWeakTo(Type attackType){
         return weakTo.contains(attackType.name());

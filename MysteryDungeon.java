@@ -680,14 +680,14 @@ public class MysteryDungeon {
     private void moveAlly(Ally a){
         if(a.curTarget != null && adjacentToTarget(a)){
             turnToTarget(a);
-            a.attacks(FixedAttack.NORMAL_ATTACK, a.curTarget, game);
+            a.attacks(bestAttack(a), a.curTarget, game);
             return;
         }
         List<Direction> adj = adjacentEnemies(a);
         if(adj.size() != 0){
             a.facing = adj.get(ran.nextInt(adj.size()));
             a.curTarget = creatureAt[a.x + a.facing.dx()][a.y + a.facing.dy()];
-            a.attacks(FixedAttack.NORMAL_ATTACK, a.curTarget, game);
+            a.attacks(bestAttack(a), a.curTarget, game);
             return;
         }
         List<Direction> open = getOpenDirections(a);
@@ -702,6 +702,19 @@ public class MysteryDungeon {
             moveCreature(a, open.get(ran.nextInt(open.size())));
         }
         checkForFlats(a);
+    }
+
+    private Attack bestAttack(Creature c){
+        Attack bestAttack = FixedAttack.NORMAL_ATTACK;
+        int bestDamage = FixedAttack.NORMAL_ATTACK.damage(c, c.curTarget, game);
+        for(LearnedAttack a: c.attacks){
+            int damage = a.damage(c, c.curTarget, game);
+            if(damage > bestDamage && a.hasPP()){
+                bestAttack = a;
+                bestDamage = damage;
+            }
+        }
+        return bestAttack;
     }
 
     private boolean adjacentToTarget(Creature c){
@@ -790,14 +803,14 @@ public class MysteryDungeon {
     private void moveEnemy(Enemy e){
         if(e.curTarget != null && adjacentToTarget(e) && ran.nextDouble() < 0.8){
             turnToTarget(e);
-            e.attacks(FixedAttack.NORMAL_ATTACK, e.curTarget, game);
+            e.attacks(bestAttack(e), e.curTarget, game);
             return;
         }
         List<Direction> adj = adjacentEnemies(e);
         if(adj.size() != 0 && ran.nextDouble() < 0.8){
             e.facing = adj.get(ran.nextInt(adj.size()));
             e.curTarget = creatureAt[e.x + e.facing.dx()][e.y + e.facing.dy()];
-            e.attacks(FixedAttack.NORMAL_ATTACK, e.curTarget, game);
+            e.attacks(bestAttack(e), e.curTarget, game);
             return;
         }
         List<Direction> open = getOpenDirections(e);
