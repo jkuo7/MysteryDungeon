@@ -640,6 +640,8 @@ public class MysteryDungeon {
     void playerAttacks(Attack a){
         if(findPlayerTarget()){
             player.attacks(a, player.curTarget, game);
+        } else {
+            a.usePP();
         }
         restOfTurn();
     }
@@ -915,6 +917,7 @@ public class MysteryDungeon {
                 if(pm.curTarget == c){
                     pm.curTarget = null;
                 }
+                pm.getExp(c.expGiven(), game);
             }
             Enemy e = (Enemy) c;
             enemies.remove(e);

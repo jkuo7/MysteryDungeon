@@ -7,7 +7,7 @@ public class Player extends PartyMember{
     Set<PartyMember> party;
     Set<Ally> allies;
     int bagLimit = 20;
-    Attack lastAttack;
+    LearnedAttack lastAttack;
 
 
     Player(int i, int j){
@@ -22,9 +22,8 @@ public class Player extends PartyMember{
         name = "Player";
         player = this;
         party.add(this);
-        attacks.add(VariableAttack.TACKLE);
-        attacks.add(VariableAttack.EMBER);
-        setAttacksString();
+        attacks.add(new LearnedAttack(VariableAttack.TACKLE));
+        attacks.add(new LearnedAttack(VariableAttack.EMBER));
     }
 
     void checkCritical(MysteryDungeonGame game){

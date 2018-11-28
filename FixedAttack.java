@@ -1,20 +1,21 @@
 public enum FixedAttack implements Attack{
 
-    NORMAL_ATTACK (Type.NORMAL, 5, "normal attack");
+    NORMAL_ATTACK (Type.NORMAL, 5, 0, "a normal attack");
 
     private Type type;
-    private int power;
+    private int power, maxPP;
     private String name;
 
-    FixedAttack(Type t, int p, String n){
+    FixedAttack(Type t, int p, int m, String n){
         type = t;
         power = p;
+        maxPP = m;
         name = n;
     }
 
     public void usedOn(Creature attacker, Creature defender, MysteryDungeonGame game){
-        defender.attackedFor(power, game);
         game.addMessage(String.format("%s used %s on %s", attacker.name, name, defender.name));
+        defender.attackedFor(power, game);
     }
 
     public String toString(){
@@ -27,7 +28,10 @@ public enum FixedAttack implements Attack{
                 type.getColor().getRed(), type.getColor().getGreen(), type.getColor().getBlue(), name);
     }
 
-    public String getName(){
-        return name;
+    public int getMaxPP(){
+        return maxPP;
     }
+
+    public void usePP(){}
+
 }

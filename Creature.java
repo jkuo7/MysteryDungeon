@@ -8,7 +8,7 @@ public abstract class Creature extends Occupant{
     double curHP;
     Creature curTarget;
     Type type;
-    Set<Attack> attacks = new LinkedHashSet<>(4);
+    Set<LearnedAttack> attacks = new LinkedHashSet<>(4);
 
 
     Creature(int i, int j){
@@ -30,9 +30,6 @@ public abstract class Creature extends Occupant{
 
     void attacks(Attack a, Creature c, MysteryDungeonGame game){
         a.usedOn(this, c, game);
-        if(c.curHP <= 0) {
-            game.addMessage(String.format("%s fainted!", c.name));
-        }
     }
 
     void attackedFor(int a, MysteryDungeonGame game){

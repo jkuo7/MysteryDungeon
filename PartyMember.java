@@ -8,7 +8,6 @@ public abstract class PartyMember extends Creature{
     boolean critical = false;
     int level = 1;
     int exp = 0;
-    private String attacksString = "";
 
     PartyMember(int i, int j){
         super(i, j);
@@ -45,16 +44,11 @@ public abstract class PartyMember extends Creature{
 
     void attacks(Attack a, Creature c, MysteryDungeonGame game){
         super.attacks(a, c, game);
-        if(c.curHP <= 0){
-            for(PartyMember pm: player.party){
-                pm.getExp(c.expGiven(), game);
-            }
-        }
         checkHunger();
         checkHealth(game);
     }
 
-    private void getExp(int e, MysteryDungeonGame game){
+    void getExp(int e, MysteryDungeonGame game){
         exp += e;
         while(exp >= level * 100){
             levelUp(game);
@@ -104,17 +98,17 @@ public abstract class PartyMember extends Creature{
                     textColor.getRed(), textColor.getGreen(), textColor.getBlue());
         }
         return String.format("%s%s (%s) (HP: %d/%d, Belly: %d/%d) </font></html>\n%s%s Type, Lv. %d, Exp to next level: %d </font></html>\n%s",
-                color, name, symbol, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly, color, type, level, level * 100 - exp, attacksString);
+                color, name, symbol, (int) Math.ceil(curHP), maxHP, (int) Math.ceil(curBelly), maxBelly, color, type, level, level * 100 - exp, attacksString());
     }
 
-    void setAttacksString(){
+    String attacksString(){
         String s= "<html>";
-        for(Attack a: attacks){
+        for(LearnedAttack a: attacks){
             s += a.inHTML() + ", ";
         }
         s = s.substring(0, s.length() - 2);
         s += "</html>";
-        attacksString = s;
+        return s;
     }
 
 }

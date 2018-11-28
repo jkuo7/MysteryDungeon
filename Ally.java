@@ -18,9 +18,8 @@ public class Ally extends PartyMember{
         textColor = type.getColor();
         allyTotal++;
         name = "Ally " + allyNumber;
-        attacks.add(VariableAttack.TACKLE);
-        attacks.add(startAttack[allyNumber % startAttack.length]);
-        setAttacksString();
+        attacks.add(new LearnedAttack(VariableAttack.TACKLE));
+        attacks.add(new LearnedAttack(startAttack[allyNumber % startAttack.length]));
     }
 
     void checkHealth(MysteryDungeonGame game){

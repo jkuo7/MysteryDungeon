@@ -1,5 +1,6 @@
 public interface Attack {
     void usedOn(Creature attacker, Creature defender, MysteryDungeonGame game);
     String inHTML();
-    String getName();
+    int getMaxPP();
+    void usePP();
 }

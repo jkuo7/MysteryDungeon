@@ -17,7 +17,7 @@ public class Enemy extends Creature{
         enemyNumber = enemyTotal;
         enemyTotal++;
         name = "Enemy " + enemyNumber;
-        attacks.add(VariableAttack.TACKLE);
+        attacks.add(new LearnedAttack(VariableAttack.TACKLE));
     }
 
     void take(Holdable h, MysteryDungeon dungeon){
@@ -30,6 +30,7 @@ public class Enemy extends Creature{
     void checkHealth(MysteryDungeonGame game){
         if(curHP == 0){
             game.outOfHP(this);
+            game.addMessage(String.format("%s fainted!", name));
         }
     }
 

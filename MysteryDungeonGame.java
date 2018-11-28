@@ -277,12 +277,12 @@ public class MysteryDungeonGame extends JKGame {
     private void showAttacks(){
         Object[] attacks = player.getAttacks();
 
-        Attack a = (Attack) JOptionPane.showInputDialog(this,
+        LearnedAttack a = (LearnedAttack) JOptionPane.showInputDialog(this,
                 "Choose an attack to use",
                 "Attacks",
                 JOptionPane.PLAIN_MESSAGE,
                 null, attacks, player.lastAttack);
-        if(a!= null){
+        if(a!= null && a.hasPP()){
             player.lastAttack = a;
             dungeon.playerAttacks(a);
         }
@@ -343,7 +343,7 @@ public class MysteryDungeonGame extends JKGame {
             FontMetrics fm = g2d.getFontMetrics();
             g2d.drawString("WASD to move", (GAME_WIDTH - fm.stringWidth("WASD to move"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 150);
             g2d.drawString("Q/E/Z/X to move NW/NE/SW/SE", (GAME_WIDTH - fm.stringWidth("Q/E/Z/X to move NW/NE/SW/SE"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 100);
-            g2d.drawString("SPACE to attack/idle", (GAME_WIDTH - fm.stringWidth("SPACE to attack/idle"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 50);
+            g2d.drawString("SPACE/K to normal/special attack", (GAME_WIDTH - fm.stringWidth("SPACE/K to normal/special attack"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 50);
             g2d.drawString("O to open bag", (GAME_WIDTH - fm.stringWidth("O to open bag"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent());
             g2d.drawString("P to view party", (GAME_WIDTH - fm.stringWidth("P to view party"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 50);
             g2d.drawString("I to inspect floor", (GAME_WIDTH - fm.stringWidth("I to inspect floor"))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 100);
@@ -403,6 +403,7 @@ public class MysteryDungeonGame extends JKGame {
         for(Occupant o: player.party){
             paintOccupant(g2d, fm, o);
         }
+        paintPartySquares(g2d);
     }
 
     private void paintOccupant(Graphics2D g2d, FontMetrics fm, Occupant o){
@@ -416,6 +417,15 @@ public class MysteryDungeonGame extends JKGame {
             g2d.drawString(o.symbol(), -TILE_SIZE/2 + (TILE_SIZE - fm.stringWidth(o.symbol))/2, -TILE_SIZE/2 + (TILE_SIZE - fm.getHeight()) / 2 + fm.getAscent());
             g2d.rotate(-Math.toRadians(o.facing.angle()));
             g2d.translate(-(o.x * TILE_SIZE + TILE_SIZE/2), -(o.y * TILE_SIZE + HUD_HEIGHT + TILE_SIZE/2));
+        }
+    }
+
+    private void paintPartySquares(Graphics2D g2d){
+        g2d.setColor(Color.GREEN);
+        g2d.drawRect(player.x * TILE_SIZE, player.y * TILE_SIZE + HUD_HEIGHT, TILE_SIZE - 1, TILE_SIZE - 1);
+        g2d.setColor(Color.CYAN);
+        for(Ally a: player.allies){
+            g2d.drawRect(a.x * TILE_SIZE, a.y * TILE_SIZE + HUD_HEIGHT, TILE_SIZE - 1, TILE_SIZE - 1);
         }
     }
 
