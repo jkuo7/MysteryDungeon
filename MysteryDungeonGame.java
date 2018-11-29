@@ -241,20 +241,10 @@ public class MysteryDungeonGame extends JKGame {
     }
 
     private void showBag(){
-        Object[] items = player.getBag();
-
-        Item i = (Item) JOptionPane.showInputDialog(this,
-                "Choose an item to use",
-                "Bag",
-                JOptionPane.PLAIN_MESSAGE,
-                null, items, "Choose an item to use");
+        Item i = (Item) promptInput("Choose an item to use", "Bag", player.getBag(), "Choose an item to use");
         if(i!= null){
             Object[] party = player.getParty();
-            PartyMember pm = (PartyMember) JOptionPane.showInputDialog(this,
-                    "Who should use it?",
-                    "Party",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null, party, party[0]);
+            PartyMember pm = (PartyMember) promptInput("Who should use it?", "Party", party, party[0]);
             if(pm != null){
                 pm.useFromBag(i, this);
                 repaintStats();
@@ -275,17 +265,17 @@ public class MysteryDungeonGame extends JKGame {
     }
 
     private void showAttacks(){
-        Object[] attacks = player.getAttacks();
-
-        LearnedAttack a = (LearnedAttack) JOptionPane.showInputDialog(this,
-                "Choose an attack to use",
-                "Attacks",
-                JOptionPane.PLAIN_MESSAGE,
-                null, attacks, player.lastAttack);
+        LearnedAttack a = (LearnedAttack) promptInput("Choose an attack to use", "Attacks", player.getAttacks(), player.lastAttack);
         if(a!= null && a.hasPP()){
             player.lastAttack = a;
             dungeon.playerAttacks(a);
         }
+    }
+
+    /** Helper method to prompt for an input using JOptionPane.showInputDialog() */
+    Object promptInput(String prompt, String title, Object[] choices, Object def){
+        return JOptionPane.showInputDialog(this, prompt, title, JOptionPane.PLAIN_MESSAGE,
+                null, choices, def);
     }
 
     void askNextFloor(){
