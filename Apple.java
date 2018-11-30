@@ -61,12 +61,13 @@ public class Apple extends Item{
         description = kind.getDescription();
     }
 
-    void used(PartyMember p){
+    boolean used(PartyMember p, MysteryDungeonGame game){
         if(Math.ceil(p.curBelly) == p.maxBelly || kind == Kinds.GOLDEN_APPLE){
             p.maxBelly += increased;
         } else {
             p.curBelly = Math.min(p.maxBelly, p.curBelly + restored);
         }
+        return true;
     }
 
 }

@@ -76,10 +76,11 @@ public abstract class PartyMember extends Creature{
     abstract void take(Item i, MysteryDungeonGame game, MysteryDungeon dungeon);
 
     void useFromBag(Item i, MysteryDungeonGame game){
-        i.used(this);
-        player.bag.remove(i);
-        game.addMessage(String.format("%s used %s", name, i.name));
-        checkCritical(game);
+        if(i.used(this, game)){
+            player.bag.remove(i);
+            game.addMessage(String.format("%s used %s", name, i.name));
+            checkCritical(game);
+        }
     }
 
     int expGiven(){
@@ -110,6 +111,10 @@ public abstract class PartyMember extends Creature{
         s = s.substring(0, s.length() - 2);
         s += "</html>";
         return s;
+    }
+
+    Object[] getAttacks(){
+        return attacks.toArray();
     }
 
 }

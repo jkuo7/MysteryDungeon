@@ -5,14 +5,14 @@ public abstract class Item extends Holdable{
         super(i, j);
     }
 
-    abstract void used(PartyMember pm);
+    abstract boolean used(PartyMember pm, MysteryDungeonGame game);
 
-     void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){
-         a.take(this, game, dungeon);
-     }
+    void walkedOn(Ally a, MysteryDungeonGame game, MysteryDungeon dungeon){
+        a.take(this, game, dungeon);
+    }
 
-     void walkedOn(Player p, MysteryDungeonGame game, MysteryDungeon dungeon){
-         p.take(this, game, dungeon);
-     }
+    void walkedOn(Player p, MysteryDungeonGame game, MysteryDungeon dungeon){
+        p.take(this, game, dungeon);
+    }
 
 }

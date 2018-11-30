@@ -87,7 +87,7 @@ public class MysteryDungeon {
         game = g;
         player = p;
 
-        ran = new Random(seed);
+        ran = new Random();
         regions = new int[WIDTH][HEIGHT];
 
         seen = new boolean[WIDTH][HEIGHT];
@@ -432,16 +432,34 @@ public class MysteryDungeon {
     }
 
     private void addAlly(Ally a){
-        int x, y;
-        do{
-            x = player.x + ran.nextInt(2);
-            y = player.y + ran.nextInt(2);
-        } while(!isRoom(x, y) || (x == goal.x && y == goal.y) || creatureAt[x][y] != null);
-
-        a.x = x;
-        a.y = y;
-        creatureAt[x][y] = a;
-
+        int x = player.x;
+        int y = player.y;
+        int dx = 2 * ran.nextInt(2) - 1;
+        int dy = 2 * ran.nextInt(2) - 1;
+        int m = 1;
+        while((x > 0 && x < WIDTH - 1) || (y > 0 &&  y < HEIGHT - 1)){
+            while(2 * (x - player.x) * dx < m){
+                if(isRoom(x, y) && x != goal.x && y != goal.y && creatureAt[x][y] == null){
+                    a.x = x;
+                    a.y = y;
+                    creatureAt[x][y] = a;
+                    return;
+                }
+                x += dx;
+            }
+            while(2 * (y - player.y) * dy < m){
+                if(isRoom(x, y) && x != goal.x && y != goal.y && creatureAt[x][y] == null){
+                    a.x = x;
+                    a.y = y;
+                    creatureAt[x][y] = a;
+                    return;
+                }
+                y += dy;
+            }
+            dx *= -1;
+            dy *= -1;
+            m += 1;
+        }
     }
 
     private void addEnemies(){
@@ -481,7 +499,7 @@ public class MysteryDungeon {
     }
 
     private void addCoins(){
-        int numCoins = 5 + ran.nextInt(15);
+        int numCoins = 15 + ran.nextInt(5);
         int x, y;
         for(int i = 0; i <= numCoins; i++){
             do{
@@ -495,7 +513,7 @@ public class MysteryDungeon {
     }
 
     private void addApples(){
-        int numApples = 3 + ran.nextInt(5);
+        int numApples = 10 + ran.nextInt(5);
         int x, y;
         for(int i = 0; i <= numApples; i++){
             do{
@@ -509,7 +527,7 @@ public class MysteryDungeon {
     }
 
     private void addBerries(){
-        int numBerries = 3 + ran.nextInt(5);
+        int numBerries = 10 + ran.nextInt(5);
         int x, y;
         for(int i = 0; i <= numBerries; i++){
             do{
@@ -523,7 +541,7 @@ public class MysteryDungeon {
     }
 
     private void addTraps(){
-        int numTraps = 5 + ran.nextInt(10);
+        int numTraps = 10 + ran.nextInt(5);
         int x, y;
         for(int i = 0; i <= numTraps; i++){
             do{
@@ -935,11 +953,42 @@ public class MysteryDungeon {
             Enemy e = (Enemy) c;
             enemies.remove(e);
             if (e.held != null) {
-                flatAt[e.x][e.y] = e.held;
-                e.held.droppedAt(e.x, e.y);
-                flatOccupants.add(e.held);
+                dropHeld(e.held, e.x, e.y);
             }
         }
+    }
+
+    private void dropHeld(Holdable held, int startX, int startY){
+        int x = startX;
+        int y = startY;
+        int dx = 2 * ran.nextInt(2) - 1;
+        int dy = 2 * ran.nextInt(2) - 1;
+        int m = 1;
+        while((x > 0 && x < WIDTH - 1) || (y > 0 &&  y < HEIGHT - 1)){
+            while(2 * (x - startX) * dx < m){
+                if(regions[x][y] > 0 && flatAt[x][y] == null){
+                    dropHeldAt(held, x, y);
+                    return;
+                }
+                x += dx;
+            }
+            while(2 * (y - startY) * dy < m){
+                if(regions[x][y] > 0 && flatAt[x][y] == null){
+                    dropHeldAt(held, x, y);
+                    return;
+                }
+                y += dy;
+            }
+            dx *= -1;
+            dy *= -1;
+            m += 1;
+        }
+    }
+
+    private void dropHeldAt(Holdable held, int x, int y){
+        flatAt[x][y] = held;
+        held.droppedAt(x, y);
+        flatOccupants.add(held);
     }
 
     FlatOccupant flatUnderPlayer(){

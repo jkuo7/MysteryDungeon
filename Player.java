@@ -52,10 +52,11 @@ public class Player extends PartyMember{
     }
 
     void use(Item i, MysteryDungeonGame game, MysteryDungeon dungeon){
-        i.used(this);
-        dungeon.removeFlat(i);
-        game.addMessage(String.format("%s found and used %s", name, i.name));
-        checkCritical(game);
+        if(i.used(this, game)){
+            dungeon.removeFlat(i);
+            game.addMessage(String.format("%s found and used %s", name, i.name));
+            checkCritical(game);
+        }
     }
 
     Object[] getBag(){
@@ -64,9 +65,5 @@ public class Player extends PartyMember{
 
     Object[] getParty(){
         return party.toArray();
-    }
-
-    Object[] getAttacks(){
-        return attacks.toArray();
     }
 }
