@@ -87,7 +87,7 @@ public class MysteryDungeon {
         game = g;
         player = p;
 
-        ran = new Random();
+        ran = new Random(seed);
         regions = new int[WIDTH][HEIGHT];
 
         seen = new boolean[WIDTH][HEIGHT];
