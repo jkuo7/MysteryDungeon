@@ -5,19 +5,13 @@ public class Enemy extends Creature{
     static int enemyTotal = 1;
 
     Enemy(int i, int j){
-        super(i, j);
+        super(i, j, Pokemon.BIDOOF);
         isEnemy = true;
         maxHP = 100;
         curHP = maxHP;
         attack = 5;
-
-        symbol = "♉";
-        type = Type.NORMAL;
-        textColor = type.getColor();
         enemyNumber = enemyTotal;
         enemyTotal++;
-        name = "Enemy " + enemyNumber;
-        attacks.add(new LearnedAttack(VariableAttack.TACKLE));
     }
 
     void take(Holdable h, MysteryDungeon dungeon){

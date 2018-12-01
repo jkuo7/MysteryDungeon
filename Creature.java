@@ -9,13 +9,22 @@ public abstract class Creature extends Occupant{
     Creature curTarget;
     Type type;
     Set<LearnedAttack> attacks = new LinkedHashSet<>(4);
+    Pokemon pokemon;
 
-
-    Creature(int i, int j){
+    Creature(int i, int j, Pokemon p){
         super(i, j);
         canBeWalkedOn = false;
         def = 10;
+        pokemon = p;
+        type = pokemon.getType();
+        textColor = type.getColor();
+        name = pokemon.getName();
+        symbol = pokemon.getSymbol();
+        for(Attack a : pokemon.getStartAttacks()){
+            attacks.add(new LearnedAttack(a));
+        }
     }
+
     void move(int dx, int dy, MysteryDungeonGame game){
         move(dx, dy);
         checkHealth(game);

@@ -11,19 +11,14 @@ public class Player extends PartyMember{
 
 
     Player(int i, int j){
-        super(i, j);
+        super(i, j, Pokemon.TORCHIC);
         isPlayer = true;
-        symbol = "⍥";
-        type = Type.FIRE;
-        textColor = type.getColor();
         bag = new LinkedHashSet<>();
         party = new LinkedHashSet<>();
         allies = new LinkedHashSet<>();
         name = "Player";
         player = this;
         party.add(this);
-        attacks.add(new LearnedAttack(VariableAttack.TACKLE));
-        attacks.add(new LearnedAttack(VariableAttack.EMBER));
     }
 
     void checkCritical(MysteryDungeonGame game){

@@ -9,8 +9,8 @@ public abstract class PartyMember extends Creature{
     int level = 1;
     int exp = 0;
 
-    PartyMember(int i, int j){
-        super(i, j);
+    PartyMember(int i, int j, Pokemon p){
+        super(i, j, p);
         maxHP = 200;
         curHP = maxHP;
         attack = 10;

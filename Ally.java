@@ -4,22 +4,15 @@ public class Ally extends PartyMember{
     int allyNumber;
     static int allyTotal = 1;
     boolean swapped;
-    static Type[] allyTypes = {Type.ELECTRIC, Type.WATER, Type.GRASS};
-    static Attack[] startAttack = {VariableAttack.THUNDER_SHOCK, VariableAttack.BUBBLE, VariableAttack.VINE_WHIP};
+    static Pokemon[] pokemonTypes = {Pokemon.PIKACHU, Pokemon.PIPLUP, Pokemon.SNIVY};
 
     Ally(int i, int j, Player p){
-        super(i, j);
-        symbol = "⍥";
+        super(i, j, pokemonTypes[allyTotal % pokemonTypes.length]);
         player = p;
         player.party.add(this);
         player.allies.add(this);
         allyNumber = allyTotal;
-        type = allyTypes[allyNumber % allyTypes.length];
-        textColor = type.getColor();
         allyTotal++;
-        name = "Ally " + allyNumber;
-        attacks.add(new LearnedAttack(VariableAttack.TACKLE));
-        attacks.add(new LearnedAttack(startAttack[allyNumber % startAttack.length]));
     }
 
     void checkHealth(MysteryDungeonGame game){
