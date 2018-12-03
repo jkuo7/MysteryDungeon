@@ -4,4 +4,5 @@ public interface Attack {
     String inHTML();
     int getMaxPP();
     void usePP();
+    String getName();
 }

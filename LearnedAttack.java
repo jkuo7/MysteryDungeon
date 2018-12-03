@@ -36,6 +36,10 @@ public class LearnedAttack implements Attack{
         curPP -= 1;
     }
 
+    public String getName(){
+        return attack.getName();
+    }
+
     boolean hasPP(){
         return curPP > 0;
     }

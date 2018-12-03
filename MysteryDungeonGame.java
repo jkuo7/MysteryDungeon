@@ -272,16 +272,21 @@ public class MysteryDungeonGame extends JKGame {
         }
     }
 
-    /** Helper method to prompt for an input using JOptionPane.showInputDialog() */
+    /** Helper method to prompt for a confirmation */
+    boolean promptConfirm(String prompt, String title){
+        return JOptionPane.showConfirmDialog(this,
+                prompt, title, JOptionPane.YES_NO_OPTION)
+                == JOptionPane.YES_OPTION;
+    }
+
+    /** Helper method to prompt for an input from choices */
     Object promptInput(String prompt, String title, Object[] choices, Object def){
         return JOptionPane.showInputDialog(this, prompt, title, JOptionPane.PLAIN_MESSAGE,
                 null, choices, def);
     }
 
     void askNextFloor(){
-        Object selectedValue = JOptionPane.showConfirmDialog(this,
-                "Go to the next floor?", "Stairs Reached", JOptionPane.YES_NO_OPTION);
-        if(selectedValue.equals(JOptionPane.YES_OPTION)){
+        if(promptConfirm("Go to the next floor?", "Stairs Reached")){
             if(curFloor == maxFloor){
                 gameOver(String.format("Congratulations!\nCleared %d floors in %d moves\n$%d collected",
                         maxFloor, moves, player.money),

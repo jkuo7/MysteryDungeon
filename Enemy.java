@@ -7,9 +7,7 @@ public class Enemy extends Creature{
     Enemy(int i, int j){
         super(i, j, Pokemon.BIDOOF);
         isEnemy = true;
-        maxHP = 100;
         curHP = maxHP;
-        attack = 5;
         enemyNumber = enemyTotal;
         enemyTotal++;
     }

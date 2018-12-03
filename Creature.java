@@ -14,12 +14,14 @@ public abstract class Creature extends Occupant{
     Creature(int i, int j, Pokemon p){
         super(i, j);
         canBeWalkedOn = false;
-        def = 10;
         pokemon = p;
         type = pokemon.getType();
         textColor = type.getColor();
         name = pokemon.getName();
         symbol = pokemon.getSymbol();
+        maxHP = pokemon.getMaxHP();
+        attack = pokemon.getAtk();
+        def = pokemon.getDef();
         for(Attack a : pokemon.getStartAttacks()){
             attacks.add(new LearnedAttack(a));
         }

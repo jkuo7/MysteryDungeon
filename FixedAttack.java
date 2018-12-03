@@ -32,6 +32,10 @@ public enum FixedAttack implements Attack{
                 type.getColor().getRed(), type.getColor().getGreen(), type.getColor().getBlue(), name);
     }
 
+    public String getName(){
+        return name;
+    }
+
     public int getMaxPP(){
         return maxPP;
     }

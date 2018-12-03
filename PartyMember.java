@@ -8,12 +8,14 @@ public abstract class PartyMember extends Creature{
     boolean critical = false;
     int level = 1;
     int exp = 0;
+    LearnedAttack lastAttack;
 
     PartyMember(int i, int j, Pokemon p){
         super(i, j, p);
-        maxHP = 200;
+        maxHP *= 2;
         curHP = maxHP;
-        attack = 10;
+        attack *= 2;
+        def *= 2;
         isEnemy = false;
     }
 
@@ -63,6 +65,33 @@ public abstract class PartyMember extends Creature{
         def += 2;
         curHP = maxHP;
         game.addMessage(String.format("%s leveled up to level %d! Max HP +%d, Attack +%d, Defense +%d", name, level, 20, 2, 2), Color.GREEN);
+        learnMoveOnLevelUp(game);
+    }
+
+    private void learnMoveOnLevelUp(MysteryDungeonGame game){
+        if(pokemon.learnsMoveAtLevel(level)){
+            Attack a = pokemon.moveLearnedAtLevel(level);
+            if(attacks.size() >= 4){
+                if(game.promptConfirm(String.format("%s already has 4 attacks.\nLearn %s?", name, a.getName()),"Learn a New Attack?")){
+                    LearnedAttack removed = (LearnedAttack) game.promptInput("Which attack should be removed?",
+                            "Choose an attack to remove", getAttacks(), "Choose an attack to remove");
+                    if(removed != null) {
+                        attacks.remove(removed);
+                        if (removed.equals(lastAttack)) {
+                            lastAttack = null;
+                        }
+                    } else {
+                        game.addMessage(String.format("%s did not learn %s", name, a.getName()));
+                        return;
+                    }
+                } else {
+                    game.addMessage(String.format("%s did not learn %s", name, a.getName()));
+                    return;
+                }
+            }
+            attacks.add(new LearnedAttack(a));
+            game.addMessage(String.format("%s learned %s!", name, a.getName()), Color.GREEN);
+        }
     }
 
     abstract void checkCritical(MysteryDungeonGame game);

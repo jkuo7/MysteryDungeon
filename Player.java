@@ -7,7 +7,6 @@ public class Player extends PartyMember{
     Set<PartyMember> party;
     Set<Ally> allies;
     int bagLimit = 20;
-    LearnedAttack lastAttack;
 
 
     Player(int i, int j){
