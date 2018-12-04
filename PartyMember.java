@@ -73,24 +73,24 @@ public abstract class PartyMember extends Creature{
             Attack a = pokemon.moveLearnedAtLevel(level);
             if(attacks.size() >= 4){
                 if(game.promptConfirm(String.format("%s already has 4 attacks.\nLearn %s?", name, a.getName()),"Learn a New Attack?")){
-                    LearnedAttack removed = (LearnedAttack) game.promptInput("Which attack should be removed?",
-                            "Choose an attack to remove", getAttacks(), "Choose an attack to remove");
-                    if(removed != null) {
-                        attacks.remove(removed);
-                        if (removed.equals(lastAttack)) {
+                    int index = game.promptOption("Which attack should be removed?",
+                            "Choose an attack to remove", getAttacks());
+                    if(index != -1) {
+                        if (attacks.get(index).equals(lastAttack)) {
                             lastAttack = null;
                         }
+                        attacks.set(index, new LearnedAttack(a));
+                        game.addMessage(String.format("%s learned %s!", name, a.getName()), Color.GREEN);
                     } else {
                         game.addMessage(String.format("%s did not learn %s", name, a.getName()));
-                        return;
                     }
                 } else {
                     game.addMessage(String.format("%s did not learn %s", name, a.getName()));
-                    return;
                 }
+            } else {
+                attacks.add(new LearnedAttack(a));
+                game.addMessage(String.format("%s learned %s!", name, a.getName()), Color.GREEN);
             }
-            attacks.add(new LearnedAttack(a));
-            game.addMessage(String.format("%s learned %s!", name, a.getName()), Color.GREEN);
         }
     }
 

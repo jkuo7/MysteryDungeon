@@ -285,6 +285,12 @@ public class MysteryDungeonGame extends JKGame {
                 null, choices, def);
     }
 
+    /** Helper method to prompt for an option from choices */
+    int promptOption(String prompt, String title, Object[] choices){
+        return JOptionPane.showOptionDialog(this, prompt, title, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, choices, null);
+    }
+
     void askNextFloor(){
         if(promptConfirm("Go to the next floor?", "Stairs Reached")){
             if(curFloor == maxFloor){

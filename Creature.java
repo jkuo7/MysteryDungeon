@@ -1,5 +1,4 @@
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
 
 public abstract class Creature extends Occupant{
     boolean isEnemy;
@@ -8,7 +7,7 @@ public abstract class Creature extends Occupant{
     double curHP;
     Creature curTarget;
     Type type;
-    Set<LearnedAttack> attacks = new LinkedHashSet<>(4);
+    ArrayList<LearnedAttack> attacks = new ArrayList<>(4);
     Pokemon pokemon;
 
     Creature(int i, int j, Pokemon p){
