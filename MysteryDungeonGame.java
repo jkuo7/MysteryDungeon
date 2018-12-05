@@ -23,7 +23,7 @@ public class MysteryDungeonGame extends JKGame {
     private boolean criticalFlicker = false;
 
     private int curFloor = 1;
-    private int maxFloor = 2;
+    private int maxFloor;
 
     private int moves = 0;
 
@@ -83,6 +83,21 @@ public class MysteryDungeonGame extends JKGame {
 
     /** Starts the game */
     private void startGame(){
+        String playerName = "";
+        while (playerName.equals("")) {
+            playerName = (String) promptInput("What is your name?",
+                    "Enter Your Name", null, null);
+        }
+        player.name = playerName;
+
+        Integer[] floors = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int floor = -1;
+        while(floor == -1) {
+            floor = (int) promptInput("How many floors would you like to go through?",
+                    "Choose Number of Floors", floors, floors[0]);
+        }
+        maxFloor = floor;
+
         gameNotStart = false;
         timer.stop();
         timer = new Timer(500, (ae) ->{

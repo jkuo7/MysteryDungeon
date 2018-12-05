@@ -2,27 +2,27 @@ import java.util.*;
 
 public enum Pokemon {
     TORCHIC (Type.FIRE, "Torchic", "⍥", 100, 5, 5,
-            new LinkedList<>(Arrays.asList(VariableAttack.TACKLE, VariableAttack.EMBER)),
+            Arrays.asList(VariableAttack.TACKLE, VariableAttack.EMBER),
             makeLevelUpAttacks(
                     new ArrayList<>(Arrays.asList(2, 4, 6)),
                     new ArrayList<>(Arrays.asList(VariableAttack.VINE_WHIP, VariableAttack.BUBBLE, VariableAttack.THUNDER_SHOCK)))),
     PIPLUP (Type.WATER, "Piplup", "⍥", 100, 5, 5,
-            new LinkedList<>(Arrays.asList(VariableAttack.TACKLE, VariableAttack.BUBBLE)),
+            Arrays.asList(VariableAttack.TACKLE, VariableAttack.BUBBLE),
             makeLevelUpAttacks(
                     new ArrayList<>(Arrays.asList(2, 4, 6)),
                     new ArrayList<>(Arrays.asList(VariableAttack.EMBER, VariableAttack.THUNDER_SHOCK, VariableAttack.VINE_WHIP)))),
     SNIVY (Type.GRASS, "Snivy", "⍥", 100, 5, 5,
-            new LinkedList<>(Arrays.asList(VariableAttack.TACKLE, VariableAttack.VINE_WHIP)),
+            Arrays.asList(VariableAttack.TACKLE, VariableAttack.VINE_WHIP),
             makeLevelUpAttacks(
                     new ArrayList<>(Arrays.asList(2, 4, 6)),
                     new ArrayList<>(Arrays.asList(VariableAttack.THUNDER_SHOCK, VariableAttack.EMBER, VariableAttack.BUBBLE)))),
     PIKACHU (Type.ELECTRIC, "Pikachu", "⍥", 100, 5, 5,
-            new LinkedList<>(Arrays.asList(VariableAttack.TACKLE, VariableAttack.THUNDER_SHOCK)),
+            Arrays.asList(VariableAttack.TACKLE, VariableAttack.THUNDER_SHOCK),
             makeLevelUpAttacks(
                     new ArrayList<>(Arrays.asList(2, 4, 6)),
                     new ArrayList<>(Arrays.asList(VariableAttack.BUBBLE, VariableAttack.VINE_WHIP, VariableAttack.EMBER)))),
     BIDOOF (Type.NORMAL, "Bidoof", "♉", 100, 5, 5,
-            new LinkedList<>(Arrays.asList(VariableAttack.TACKLE)),
+            Arrays.asList(VariableAttack.TACKLE),
             makeLevelUpAttacks(
                     new ArrayList<>(Arrays.asList()),
                     new ArrayList<>(Arrays.asList())));
