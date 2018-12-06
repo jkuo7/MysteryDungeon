@@ -90,10 +90,10 @@ public class MysteryDungeonGame extends JKGame {
         }
         player.name = playerName;
 
-        Integer[] floors = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        int floor = -1;
-        while(floor == -1) {
-            floor = (int) promptInput("How many floors would you like to go through?",
+        Integer[] floors = {3, 4, 5, 6, 7, 8, 9, 10};
+        Integer floor = null;
+        while(floor == null) {
+            floor = (Integer) promptInput("How many floors would you like to go through?",
                     "Choose Number of Floors", floors, floors[0]);
         }
         maxFloor = floor;

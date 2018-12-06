@@ -12,7 +12,7 @@ public class MysteryDungeon {
     private int[][] regions;
     private boolean[][] seen;
 
-    private static final boolean SHOW_ALL = true;
+    private static final boolean SHOW_ALL = false;
     //set to true for testing purposes
 
     private Set<Integer> seenRooms;
