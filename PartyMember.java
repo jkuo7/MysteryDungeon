@@ -9,6 +9,7 @@ public abstract class PartyMember extends Creature{
     int level = 1;
     int exp = 0;
     LearnedAttack lastAttack;
+    static final Pokemon[] POSSIBLE_ALLIES = {Pokemon.TORCHIC, Pokemon.PIKACHU, Pokemon.PIPLUP, Pokemon.SNIVY};
 
     PartyMember(int i, int j, Pokemon p){
         super(i, j, p);

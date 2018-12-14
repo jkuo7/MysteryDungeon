@@ -9,8 +9,8 @@ public class Player extends PartyMember{
     int bagLimit = 20;
 
 
-    Player(int i, int j){
-        super(i, j, Pokemon.TORCHIC);
+    Player(int i, int j, Pokemon p){
+        super(i, j, p);
         isPlayer = true;
         bag = new LinkedHashSet<>();
         party = new LinkedHashSet<>();

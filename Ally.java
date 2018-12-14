@@ -4,10 +4,9 @@ public class Ally extends PartyMember{
     int allyNumber;
     static int allyTotal = 1;
     boolean swapped;
-    static Pokemon[] pokemonTypes = {Pokemon.PIKACHU, Pokemon.PIPLUP, Pokemon.SNIVY};
 
-    Ally(int i, int j, Player p){
-        super(i, j, pokemonTypes[allyTotal % pokemonTypes.length]);
+    Ally(int i, int j, Player p, Pokemon poke){
+        super(i, j, poke);
         player = p;
         player.party.add(this);
         player.allies.add(this);

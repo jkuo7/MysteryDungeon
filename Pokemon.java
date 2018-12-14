@@ -45,7 +45,8 @@ public enum Pokemon {
     }
 
     public String toString(){
-        return name;
+        return String.format("<html><span color=\"#%02x%02x%02x\">%s</span></html>",
+                type.getColor().getRed(), type.getColor().getGreen(), type.getColor().getBlue(), name);
     }
 
     public Type getType() {

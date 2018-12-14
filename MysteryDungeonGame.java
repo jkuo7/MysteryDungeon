@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.EnumSet;
 
 public class MysteryDungeonGame extends JKGame {
     private static final int TILE_SIZE = 16; //20
@@ -58,13 +59,6 @@ public class MysteryDungeonGame extends JKGame {
 
         timer = new Timer(750, (ae) -> repaint());
         timer.start();
-
-        player = new Player(0,0);
-        for(int i = 0; i < NUM_ALLIES; i++){
-            new Ally(0, 0, player);
-        }
-        dungeon = new MysteryDungeon(341634642L, this, player);
-
     }
 
     /** Returns action to start game */
@@ -83,12 +77,8 @@ public class MysteryDungeonGame extends JKGame {
 
     /** Starts the game */
     private void startGame(){
-        String playerName = "";
-        while (playerName.equals("")) {
-            playerName = (String) promptInput("What is your name?",
-                    "Enter Your Name", null, null);
-        }
-        player.name = playerName;
+        initiatePlayer();
+        dungeon = new MysteryDungeon(341634642L, this, player);
 
         Integer[] floors = {3, 4, 5, 6, 7, 8, 9, 10};
         Integer floor = null;
@@ -110,6 +100,35 @@ public class MysteryDungeonGame extends JKGame {
         repaint();
         bindKeyStrokes();
         messageTimer.start();
+    }
+
+    private void initiatePlayer(){
+        Pokemon poke = null;
+        while(poke == null){
+            poke = (Pokemon) promptInput("Which Pokemon would you like to play as?",
+                    "Choose a Pokemon to Play As", PartyMember.POSSIBLE_ALLIES, PartyMember.POSSIBLE_ALLIES[0]);
+        }
+
+        player = new Player(0,0, poke);
+        EnumSet<Pokemon> pokemonInParty = EnumSet.of(player.pokemon);
+
+        String playerName = "";
+        while (playerName == null || playerName.equals("")) {
+            playerName = (String) promptInput("What is your name?",
+                    "Enter Your Name", null, null);
+        }
+        player.name = playerName;
+
+        for (int i = 0; i < NUM_ALLIES; i++) {
+            if (pokemonInParty.size() >= PartyMember.POSSIBLE_ALLIES.length) {
+                pokemonInParty.clear();
+            }
+            do {
+                poke = PartyMember.POSSIBLE_ALLIES[(int)(Math.random() * PartyMember.POSSIBLE_ALLIES.length)];
+            } while(pokemonInParty.contains(poke));
+            Ally a = new Ally(0, 0, player, poke);
+            pokemonInParty.add(a.pokemon);
+        }
     }
 
     /** Binds keys to game actions */
