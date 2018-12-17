@@ -1,8 +1,8 @@
 public enum VariableAttack implements Attack{
 
-    TACKLE (Type.NORMAL, 30, 50, "Tackle"),
-    EMBER (Type.FIRE, 30, 50,  "Ember"),
     BUBBLE (Type.WATER, 30, 50,  "Bubble"),
+    EMBER (Type.FIRE, 30, 50,  "Ember"),
+    TACKLE (Type.NORMAL, 30, 50, "Tackle"),
     THUNDER_SHOCK(Type.ELECTRIC, 30, 50,  "Thunder Shock"),
     VINE_WHIP(Type.GRASS, 30, 50,  "Vine Whip");
 

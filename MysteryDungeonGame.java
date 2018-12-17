@@ -31,6 +31,7 @@ public class MysteryDungeonGame extends JKGame {
     private Timer timer;
     private Timer messageTimer;
 
+    private Dungeon dungeonKind;
     private MysteryDungeon dungeon;
 
     private Player player;
@@ -48,6 +49,7 @@ public class MysteryDungeonGame extends JKGame {
         this.setBackground(Color.BLACK);
         messages = new LinkedList<>();
         msgColors = new LinkedList<>();
+        dungeonKind = Dungeon.PLAINS;//Dungeon.getValues()[(int)(Math.random() * Dungeon.getValues().length)];
 
         bindKeyStrokeTo("enter.pressed", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), startGameAc());
         messageTimer = new Timer(500, (ae) -> {
@@ -78,7 +80,7 @@ public class MysteryDungeonGame extends JKGame {
     /** Starts the game */
     private void startGame(){
         initiatePlayer();
-        dungeon = new MysteryDungeon(341634642L, this, player);
+        dungeon = new MysteryDungeon(341634642L, this, player, dungeonKind);
 
         Integer[] floors = {3, 4, 5, 6, 7, 8, 9, 10};
         Integer floor = null;
@@ -345,7 +347,7 @@ public class MysteryDungeonGame extends JKGame {
         messageTimer.stop();
 
         timer.start();
-        dungeon = new MysteryDungeon(dungeon.nextFloorSeed(), this, player);
+        dungeon = new MysteryDungeon(dungeon.nextFloorSeed(), this, player, dungeonKind);
     }
 
     private void toNextFloor(){
@@ -393,7 +395,8 @@ public class MysteryDungeonGame extends JKGame {
             g2d.setColor(Color.WHITE);
             FontMetrics fm = g2d.getFontMetrics();
             String floor = "Floor " + curFloor;
-            g2d.drawString(floor, (GAME_WIDTH - fm.stringWidth(floor))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent());
+            g2d.drawString(dungeonKind.toString(), (GAME_WIDTH - fm.stringWidth(dungeonKind.toString()))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() - 25);
+            g2d.drawString(floor, (GAME_WIDTH - fm.stringWidth(floor))/2, (GAME_HEIGHT - fm.getHeight()) / 2 + fm.getAscent() + 25);
         }
         flicker = !flicker;
     }
@@ -411,11 +414,11 @@ public class MysteryDungeonGame extends JKGame {
     private void paintSpace(Graphics2D g2d, int x, int y, int space){
         Color bg;
         switch(space){
-            case 0: bg = Color.BLACK;
+            case 0: bg = dungeonKind.getBlankColor();
                 break;
-            case -1: bg = Color.darkGray;
+            case -1: bg = dungeonKind.getWallColor();
                 break;
-            default: bg = new Color(200,122,85);
+            default: bg = dungeonKind.getFloorColor();
                 break;
         }
         g2d.setColor(bg);

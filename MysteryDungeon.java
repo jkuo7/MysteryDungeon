@@ -12,7 +12,7 @@ public class MysteryDungeon {
     private int[][] regions;
     private boolean[][] seen;
 
-    private static final boolean SHOW_ALL = false;
+    private static final boolean SHOW_ALL = true;
     //set to true for testing purposes
 
     private Set<Integer> seenRooms;
@@ -29,6 +29,7 @@ public class MysteryDungeon {
     private Creature[][] creatureAt;
     private static final int MIN_ENEMIES = 5;
     private static final int MAX_ENEMIES = 10;
+    private Dungeon dungeonKind;
 
     MysteryDungeonGame game;
 
@@ -83,9 +84,10 @@ public class MysteryDungeon {
 
 
     /** Generates new MysteryDungeon floor, populating it with rooms and hallways. */
-    public MysteryDungeon(long seed, MysteryDungeonGame g, Player p) {
+    public MysteryDungeon(long seed, MysteryDungeonGame g, Player p, Dungeon d) {
         game = g;
         player = p;
+        dungeonKind = d;
 
         ran = new Random(seed);
         regions = new int[WIDTH][HEIGHT];
@@ -475,7 +477,7 @@ public class MysteryDungeon {
             x = 1 + ran.nextInt(WIDTH - 2);
             y = 1 + ran.nextInt(HEIGHT - 2);
         } while (!isRoom(x, y) || flatAt[x][y] != null || creatureAt[x][y] != null);
-        Enemy e = new Enemy(x, y);
+        Enemy e = new Enemy(x, y, dungeonKind.getEnemy(ran.nextInt(dungeonKind.numEnemies())));
         creatureAt[x][y] = e;
         enemies.add(e);
     }
